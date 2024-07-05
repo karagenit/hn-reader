@@ -67,7 +67,9 @@ func updateTopStoryIds() {
 }
 
 func updateTopStoryDetails() {
-	stories = []story{getStoryDetails(40884878)}
+	stories = []story{}
+	stories = append(stories, getStoryDetails(40884878))
+	stories = append(stories, getStoryDetails(40884878))
 }
 
 // title, domain, comment_link

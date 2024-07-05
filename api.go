@@ -30,39 +30,51 @@ func getAlbums(c *gin.Context) {
 
 // ------------------
 
+type story struct {
+	ID     int    `json:"id"`
+	Title  string `json:"title"`
+	Domain string `json:"domain"`
+	Link   string `json:"link"`
+}
+
 var ids []int
 
-func getTopStories(c *gin.Context) {
-	// if isStoryReloadNeeded
-	// do requests, update array
-	getTopStoryIds()
+var stories []story
 
-	// return array
-	c.IndentedJSON(http.StatusOK, ids)
+func getTopStories(c *gin.Context) {
+	reload := isStoryReloadNeeded()
+	if reload {
+		updateTopStoryIds()
+		updateTopStoryDetails()
+	}
+
+	c.IndentedJSON(http.StatusOK, stories)
 }
 
 // TODO should be every 5 mins
-// func isStoryReloadNeeded() {
-// 	true
-// }
+func isStoryReloadNeeded() bool {
+	return true
+}
 
-func getTopStoryIds() {
+func updateTopStoryIds() {
 	resp, _ := http.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
 	// TODO handle error
-
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	// TODO handle error
-	
-	//fmt.Println(string(body))
-	// TODO parse this string as JSON and into a go array
 	_ = json.Unmarshal(body, &ids)
 	// TODO handle error
 }
 
-// title, domain, comment_link
-func getStoryDetails(id int) {
+func updateTopStoryDetails() {
+	stories = []story{getStoryDetails(40884878)}
+}
 
+// title, domain, comment_link
+func getStoryDetails(id int) story {
+	return story{
+		ID: id, Title: "test", Domain: "test", Link: "test",
+	}
 }
 
 func main() {

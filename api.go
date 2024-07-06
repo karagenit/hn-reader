@@ -9,6 +9,7 @@ import (
 	"strings"
 	"strconv"
 	"time"
+	"net/url"
 )
 
 type story struct {
@@ -60,9 +61,9 @@ func updateTopStoryDetails() {
 func getStoryDetails(id int) story {
 	var result map[string]interface{}
 
-	url := []string{"https://hacker-news.firebaseio.com/v0/item/", strconv.Itoa(id), ".json"} 
+	req_url := []string{"https://hacker-news.firebaseio.com/v0/item/", strconv.Itoa(id), ".json"} 
   
-	resp, _ := http.Get(strings.Join(url, ""))
+	resp, _ := http.Get(strings.Join(req_url, ""))
 	// TODO handle error
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
@@ -71,10 +72,14 @@ func getStoryDetails(id int) story {
 	// TODO handle error
 
 	title, title_ok := result["title"].(string)
+	link, link_ok := result["url"].(string)
 
-	if title_ok {
+	if title_ok && link_ok {
+		story_url, _ := url.Parse(link)
+		hn_url := []string{"https://news.ycombinator.com/item?id=", strconv.Itoa(id)} 
+
 		return story{
-			ID: id, Title: title, Domain: "test", Link: "test",
+			ID: id, Title: title, Domain: story_url.Hostname(), Link: strings.Join(hn_url, ""),
 		}
 	} else {
 		return story{}

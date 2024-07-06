@@ -11,7 +11,7 @@
 
     <script>
         let stories = [];
-        let categories = { // TODO fill select with these options
+        let categories = {
             "test": [],
             "another": []
         }
@@ -19,6 +19,24 @@
         loadValues = async function() {
             res = await fetch('http://localhost:8080/')
             stories = await res.json()
+            displayStories()
+        }
+
+        handleCategorizeStory = function(sel) {
+            id = sel.id
+            category = sel.value
+            story = stories.find(story => story.id == id) // == not === because story.id is an int but id is a string
+            domain = story['domain']
+
+            Object.keys(categories).forEach(category => {
+                let i = categories[category].indexOf(domain)
+                if (i > -1) {
+                    categories[category].splice(i, 1) // remove 1 element at this index
+                }
+            })
+
+            categories[category].push(domain)
+
             displayStories()
         }
 
@@ -54,8 +72,12 @@
             sel.id = story['id']
             d.appendChild(sel)
             appendSelectOptions(sel)
-
-            
+            // TODO set correct value
+            sel.addEventListener(
+                'change',
+                function() { handleCategorizeStory(sel); },
+                false
+            );
         }
 
         displayStories = function() {

@@ -90,6 +90,7 @@ func getStoryDetails(id int) story {
 func main() {
 	last_update = 0
 	router := gin.Default()
-	router.GET("/", getTopStories)
+	router.StaticFile("/", "./index.html") // just .Static tries to wildcard the whole route...
+	router.GET("/stories", getTopStories)
 	router.Run("localhost:8080")
 }

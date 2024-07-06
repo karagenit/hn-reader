@@ -19,11 +19,12 @@
             "Article (News)": [],
             "Article (Misc)": [],
             "Academic/Science": [],
-
         }
 
+
+
         loadValues = async function() {
-            res = await fetch('http://localhost:8080/')
+            res = await fetch('/stories')
             stories = await res.json()
             displayStories()
         }

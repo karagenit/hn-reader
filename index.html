@@ -35,7 +35,10 @@
                 }
             })
 
-            categories[category].push(domain)
+            // Add the domain to the newly selected category, unless it's the Uncategorized category (which doesn't exist in our map)
+            if (categories[category]) {
+                categories[category].push(domain)
+            }
 
             displayStories()
         }

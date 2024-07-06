@@ -72,12 +72,12 @@
             sel.id = story['id']
             d.appendChild(sel)
             appendSelectOptions(sel)
-            // TODO set correct value
             sel.addEventListener(
                 'change',
                 function() { handleCategorizeStory(sel); },
                 false
             );
+            sel.value = Object.keys(categories).find(category => categories[category].includes(story['domain'])) ?? ''
         }
 
         displayStories = function() {

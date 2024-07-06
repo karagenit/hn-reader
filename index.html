@@ -6,13 +6,17 @@
     <title>Caleb's HN Reader</title>
   </head>
   <body>
-    <p>Hello!</p>
-    <div id="content">
-
-    </div>
+    <select id="category" onchange="displayStories()">
+        <option value="" selected>Uncategorized</option>
+        <option value="test">Test</option>
+      </select>
+    <div id="content"></div>
 
     <script>
         let stories = [];
+        let categories = { // TODO fill select with these options
+            "test": ['github.com']
+        }
 
         loadValues = async function() {
             res = await fetch('http://localhost:8080/')
@@ -20,13 +24,27 @@
             displayStories()
         }
 
+        appendStory = function(story) {
+            let p = document.createElement('p')
+            p.innerHTML = story['title']
+            document.getElementById("content").appendChild(p)
+        }
+
         displayStories = function() {
             document.getElementById("content").innerHTML = ''
-            stories.forEach(story => {
-                let p = document.createElement('p')
-                p.innerHTML = story['title']
-                document.getElementById("content").appendChild(p)
-            });
+            currentCategory = document.getElementById("category").value
+            // if currentCategory is blank, show stories where domain is not in any other category... otherwise filter them by that category
+            if (currentCategory === '') {
+                stories.forEach(story => {
+                    appendStory(story)
+                });
+            } else {
+                stories.filter(story => {
+                    return categories[currentCategory]?.includes(story["domain"])
+                }).forEach(story => {
+                    appendStory(story)
+                });
+            }
         }
 
         loadValues()

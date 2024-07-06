@@ -7,5 +7,29 @@
   </head>
   <body>
     <p>Hello!</p>
+    <div id="content">
+
+    </div>
+
+    <script>
+        let stories = [];
+
+        loadValues = async function() {
+            res = await fetch('http://localhost:8080/')
+            stories = await res.json()
+            displayStories()
+        }
+
+        displayStories = function() {
+            document.getElementById("content").innerHTML = ''
+            stories.forEach(story => {
+                let p = document.createElement('p')
+                p.innerHTML = story['title']
+                document.getElementById("content").appendChild(p)
+            });
+        }
+
+        loadValues()
+    </script>
   </body>
 </html>

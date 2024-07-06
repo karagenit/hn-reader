@@ -33,6 +33,7 @@ func getTopStories(c *gin.Context) {
 		last_update = time.Now().Unix()
 	}
 
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 	c.IndentedJSON(http.StatusOK, stories)
 }
 

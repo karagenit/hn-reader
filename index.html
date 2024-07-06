@@ -37,14 +37,25 @@
         }
 
         appendStory = function(story) {
+            let d = document.createElement('div')
+            d.style.border = "1px solid #000";
+            document.getElementById("content").appendChild(d)
+
+            let a = document.createElement('a')
+            a.innerHTML = story['title']
+            a.href = story['link']
+            d.appendChild(a)
+
             let p = document.createElement('p')
-            p.innerHTML = story['title']
-            document.getElementById("content").appendChild(p)
+            p.innerHTML = story['domain']
+            d.appendChild(p)
 
             let sel = document.createElement('select')
             sel.id = story['id']
-            document.getElementById("content").appendChild(sel)
+            d.appendChild(sel)
             appendSelectOptions(sel)
+
+            
         }
 
         displayStories = function() {

@@ -21,7 +21,11 @@
             "Academic/Science": [],
         }
 
+        storedCategories = localStorage.getItem("categories");
 
+        if (storedCategories) {
+            categories = JSON.parse(storedCategories)
+        }
 
         loadValues = async function() {
             res = await fetch('/stories')
@@ -48,6 +52,8 @@
             }
 
             displayStories()
+
+            localStorage.setItem('categories', JSON.stringify(categories))
         }
 
         appendSelectOptions = function(element) {

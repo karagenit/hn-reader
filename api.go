@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"strings"
 	"strconv"
+	"time"
 )
 
 type story struct {
@@ -21,19 +22,21 @@ var ids []int
 
 var stories []story
 
+var last_update int64
+
 func getTopStories(c *gin.Context) {
 	reload := isStoryReloadNeeded()
-	if reload {
+	if reload { // TODO can we do this async?
 		updateTopStoryIds()
 		updateTopStoryDetails()
+		last_update = time.Now().Unix()
 	}
 
 	c.IndentedJSON(http.StatusOK, stories)
 }
 
-// TODO should be every 5 mins
 func isStoryReloadNeeded() bool {
-	return true
+	return last_update + (15 * 60) < time.Now().Unix()
 }
 
 func updateTopStoryIds() {
@@ -79,6 +82,7 @@ func getStoryDetails(id int) story {
 }
 
 func main() {
+	last_update = 0
 	router := gin.Default()
 	router.GET("/", getTopStories)
 	router.Run("localhost:8080")

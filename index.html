@@ -84,6 +84,11 @@
             a.href = story['link']
             d.appendChild(a)
 
+            let comments = document.createElement('a')
+            comments.innerHTML = '(comments)'
+            comments.href = story['comments']
+            d.appendChild(comments)
+
             let p = document.createElement('p')
             p.innerHTML = story['domain']
             d.appendChild(p)

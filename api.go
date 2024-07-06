@@ -13,10 +13,11 @@ import (
 )
 
 type story struct {
-	ID     int    `json:"id"`
-	Title  string `json:"title"`
-	Domain string `json:"domain"`
-	Link   string `json:"link"`
+	ID       int    `json:"id"`
+	Title    string `json:"title"`
+	Domain   string `json:"domain"`
+	Link     string `json:"link"`
+	Comments string `json:"comments"`
 }
 
 var ids []int
@@ -80,7 +81,7 @@ func getStoryDetails(id int) story {
 		hn_url := []string{"https://news.ycombinator.com/item?id=", strconv.Itoa(id)}
 
 		return story{
-			ID: id, Title: title, Domain: story_url.Hostname(), Link: strings.Join(hn_url, ""),
+			ID: id, Title: title, Domain: story_url.Hostname(), Link: link, Comments: strings.Join(hn_url, ""),
 		}
 	} else {
 		return story{}

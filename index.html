@@ -4,6 +4,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <title>Caleb's HN Reader</title>
+    <style>
+        div {
+            border: 1px solid #000;
+            margin-top: 1rem;
+            padding: 1rem;
+        }
+
+        #content {
+            border: none;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        p {
+            margin: 0;
+            margin-bottom: 1rem;
+        }
+    </style>
   </head>
   <body>
     <select id="category" onchange="displayStories()"></select>
@@ -76,22 +94,30 @@
 
         appendStory = function(story) {
             let d = document.createElement('div')
-            d.style.border = "1px solid #000";
             document.getElementById("content").appendChild(d)
+
+            let p1 = document.createElement('p')
+            d.appendChild(p1);
 
             let a = document.createElement('a')
             a.innerHTML = story['title']
             a.href = story['link']
-            d.appendChild(a)
+            p1.appendChild(a)
+
+            let s1 = document.createElement('span')
+            s1.innerHTML = ' '
+            p1.appendChild(s1);
 
             let comments = document.createElement('a')
             comments.innerHTML = '(comments)'
             comments.href = story['comments']
-            d.appendChild(comments)
+            p1.appendChild(comments)
 
-            let p = document.createElement('p')
-            p.innerHTML = story['domain']
-            d.appendChild(p)
+
+
+            let s2 = document.createElement('span')
+            s2.innerHTML = story['domain'] + '&nbsp;'
+            d.appendChild(s2)
 
             let sel = document.createElement('select')
             sel.id = story['id']

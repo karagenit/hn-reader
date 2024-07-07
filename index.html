@@ -11,12 +11,12 @@
             margin-top: 0.5rem;
         }
 
-        a {
+        #content a {
             color: #000;
             text-decoration: none;
         }
 
-        a:visited {
+        #content a:visited {
             color: #666;
         }
 
@@ -35,10 +35,23 @@
             margin: 1rem;
             margin-top: 0;
         }
+
+        .links {
+            float: right;
+        }
     </style>
   </head>
   <body>
-    <select id="category" onchange="displayStories()"></select>
+    <div>
+        <span>Posts in </span>
+        <select id="category" onchange="displayStories()"></select>
+        <span class="links">
+            <a href="/about">About</a>
+            &nbsp;&nbsp;
+            <a href="/export">Export</a>
+        </span>
+    </div>
+    
     <div id="content"></div>
 
     <script>

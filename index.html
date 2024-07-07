@@ -5,10 +5,19 @@
     <meta charset="utf-8">
     <title>Caleb's HN Reader</title>
     <style>
-        div {
-            border: 1px solid #000;
-            margin-top: 1rem;
-            padding: 1rem;
+        details {
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        a:visited {
+            color: #666;
         }
 
         #content {
@@ -17,9 +26,14 @@
             padding: 0;
         }
 
-        p {
-            margin: 0;
+        summary {
             margin-bottom: 1rem;
+            margin: 1rem;
+        }
+
+        p {
+            margin: 1rem;
+            margin-top: 0;
         }
     </style>
   </head>
@@ -93,10 +107,10 @@
         }
 
         appendStory = function(story) {
-            let d = document.createElement('div')
+            let d = document.createElement('details')
             document.getElementById("content").appendChild(d)
 
-            let p1 = document.createElement('p')
+            let p1 = document.createElement('summary')
             d.appendChild(p1);
 
             let a = document.createElement('a')
@@ -113,15 +127,16 @@
             comments.href = story['comments']
             p1.appendChild(comments)
 
-
+            let p2 = document.createElement('p')
+            d.appendChild(p2)
 
             let s2 = document.createElement('span')
             s2.innerHTML = story['domain'] + '&nbsp;'
-            d.appendChild(s2)
+            p2.appendChild(s2)
 
             let sel = document.createElement('select')
             sel.id = story['id']
-            d.appendChild(sel)
+            p2.appendChild(sel)
             appendSelectOptions(sel)
             sel.addEventListener(
                 'change',

@@ -2,7 +2,6 @@ package main
 
 import (
     "net/http"
-//	"fmt"
 	"io"
     "github.com/gin-gonic/gin"
 	"encoding/json"
@@ -26,6 +25,7 @@ var stories []story
 
 var last_update int64
 
+// Get an array of the top 500 stories as JSON, cached for performance
 func getTopStories(c *gin.Context) {
 	reload := isStoryReloadNeeded()
 	if reload { // TODO can we do this async?
@@ -38,10 +38,12 @@ func getTopStories(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, stories)
 }
 
+// Whether or not we should update the stories - runs every 15 mins
 func isStoryReloadNeeded() bool {
 	return last_update + (15 * 60) < time.Now().Unix()
 }
 
+// Wipe and set the `ids` global from the HN API
 func updateTopStoryIds() {
 	resp, _ := http.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
 	// TODO handle error
@@ -52,6 +54,7 @@ func updateTopStoryIds() {
 	// TODO handle error
 }
 
+// Using the `ids` global, fetch each story and put it in the `stories` global (wipes existing stories)
 func updateTopStoryDetails() {
 	stories = []story{}
 	for _, id := range ids {
@@ -59,7 +62,7 @@ func updateTopStoryDetails() {
 	}
 }
 
-// title, domain, comment_link
+// Fetches a HN story by its ID from the API and returns a `story` struct
 func getStoryDetails(id int) story {
 	var result map[string]interface{}
 

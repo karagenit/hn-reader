@@ -164,7 +164,7 @@
             currentCategory = document.getElementById("category").value
             stories.filter(story => {
                 return currentCategory === getDomainCategory(story['domain'])
-            }).forEach(story => appendStory(story));
+            }).slice(0, 50).forEach(story => appendStory(story));
         }
 
         loadValues()

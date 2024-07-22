@@ -2,11 +2,11 @@
 Simple Hacker News Reader With Categories
 
 TODO
-- Support hiding stories (already read etc.)
 - Support export
 - Add about link
-- Run cache update async as goroutine
 - Cleanup frontend
+- Allow undo of hiding a story
+- After clicking a story and going back to this site, last clicked should be pinned to the top
 
 
 Run app with `go run .`

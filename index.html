@@ -78,6 +78,12 @@
         // Map of Date -> Array of story IDs
         let hiddenStories = {};
 
+        storedHiddenStories = localStorage.getItem("hiddenStories");
+
+        if (storedHiddenStories) {
+            hiddenStories = JSON.parse(storedHiddenStories);
+        }
+
         getHiddenStories = function() {
             return Object.keys(hiddenStories).map(date => {
                 return hiddenStories[date];
@@ -90,6 +96,17 @@
                 hiddenStories[today] = []
             }
             hiddenStories[today].push(parseInt(id));
+        }
+
+        saveHiddenStories = function() {
+            // Only save the last 7 days worth of hidden stories so we don't blow up our local storage over time
+            today = getTodayDayNumber()
+            Object.keys(hiddenStories).forEach(date => {
+                if (date < today - 7) {
+                    delete hiddenStories[date];
+                }
+            });
+            localStorage.setItem('hiddenStories', JSON.stringify(hiddenStories))
         }
 
         getTodayDayNumber = function() {
@@ -126,10 +143,10 @@
         }
 
         handleHideStory = function(button) {
-            //button.parentNode.remove();
             id = button.id
             addHiddenStory(id)
             displayStories()
+            saveHiddenStories()
         }
 
         appendSelectOptions = function(element) {

@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"time"
 	"net/url"
+	"fmt"
+	"sync"
 )
 
 type story struct {
@@ -25,17 +27,26 @@ var stories []story
 
 var last_update int64
 
+var global_mutex sync.Mutex
+
 // Get an array of the top 500 stories as JSON, cached for performance
 func getTopStories(c *gin.Context) {
-	reload := isStoryReloadNeeded()
-	if reload { // TODO can we do this async?
-		updateTopStoryIds()
-		updateTopStoryDetails()
-		last_update = time.Now().Unix()
-	}
-
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 	c.IndentedJSON(http.StatusOK, stories)
+
+	reload := isStoryReloadNeeded()
+	if reload {
+		go updateTopStories()
+	}
+}
+
+func updateTopStories() {
+	global_mutex.Lock() // TODO would be nice to just return here instead of blocking, so simultaneous user requests don't result in us hitting the API back to back. Could try to use onceFunc or something. Or just a second check to isReloadNeeded inside this function too, inside the mutex lock
+	defer global_mutex.Unlock()
+	last_update = time.Now().Unix()
+	updateTopStoryIds()
+	updateTopStoryDetails()
+	fmt.Println("Finished updating stories.")
 }
 
 // Whether or not we should update the stories - runs every 15 mins
@@ -56,10 +67,11 @@ func updateTopStoryIds() {
 
 // Using the `ids` global, fetch each story and put it in the `stories` global (wipes existing stories)
 func updateTopStoryDetails() {
-	stories = []story{}
+	new_stories := make([]story, len(ids))
 	for _, id := range ids {
 		stories = append(stories, getStoryDetails(id))
 	}
+	copy(new_stories, stories)
 }
 
 // Fetches a HN story by its ID from the API and returns a `story` struct
@@ -92,7 +104,7 @@ func getStoryDetails(id int) story {
 }
 
 func main() {
-	last_update = 0
+	go updateTopStories()
 	router := gin.Default()
 	router.StaticFile("/", "./index.html") // just .Static tries to wildcard the whole route...
 	router.GET("/stories", getTopStories)

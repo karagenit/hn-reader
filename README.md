@@ -7,3 +7,8 @@ TODO
 - Add about link
 - Run cache update async as goroutine
 - Cleanup frontend
+
+
+Run app with `go run .`
+
+How to run in production mode? Need ENV VAR and run in background..

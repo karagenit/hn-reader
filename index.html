@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Caleb's HN Reader</title>
     <style>
-        details {
+        #content div {
             border: 1px solid #aaa;
             border-radius: 4px;
             margin-top: 0.5rem;
@@ -26,18 +26,19 @@
             padding: 0;
         }
 
-        summary {
-            margin-bottom: 1rem;
-            margin: 1rem;
-        }
-
         p {
             margin: 1rem;
-            margin-top: 0;
         }
 
         .links {
             float: right;
+        }
+
+        .close-button {
+            float: right;
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            color: #ba0000;
         }
     </style>
   </head>
@@ -52,7 +53,9 @@
         </span>
     </div>
     
-    <div id="content"></div>
+    <div id="content">
+        <p>Loading...</p>
+    </div>
 
     <script>
         let stories = [];
@@ -70,6 +73,23 @@
 
         if (storedCategories) {
             categories = JSON.parse(storedCategories)
+        }
+
+        // Map of Date -> Array of story IDs
+        let hiddenStories = {};
+
+        getHiddenStories = function() {
+            return Object.keys(hiddenStories).map(date => {
+                return hiddenStories[date];
+            }).flat();
+        }
+
+        addHiddenStory = function(id) {
+            today = new Date().toJSON().slice(0, 10);
+            if (!hiddenStories[today]) {
+                hiddenStories[today] = []
+            }
+            hiddenStories[today].push(parseInt(id));
         }
 
         loadValues = async function() {
@@ -101,6 +121,13 @@
             localStorage.setItem('categories', JSON.stringify(categories))
         }
 
+        handleHideStory = function(button) {
+            //button.parentNode.remove();
+            id = button.id
+            addHiddenStory(id)
+            displayStories()
+        }
+
         appendSelectOptions = function(element) {
             let uncategorized = document.createElement("option")
             uncategorized.value = ''
@@ -120,10 +147,21 @@
         }
 
         appendStory = function(story) {
-            let d = document.createElement('details')
+            let d = document.createElement('div')
             document.getElementById("content").appendChild(d)
 
-            let p1 = document.createElement('summary')
+            let close = document.createElement('span')
+            close.innerHTML = '&#9746;'
+            close.classList = 'close-button'
+            close.id = story['id'] // TODO gonna have duplicate IDs here...
+            close.addEventListener(
+                'click',
+                function() { handleHideStory(close); },
+                false
+            );
+            d.append(close)
+
+            let p1 = document.createElement('p')
             d.appendChild(p1);
 
             let a = document.createElement('a')
@@ -160,10 +198,13 @@
         }
 
         displayStories = function() {
+            hiddenIds = getHiddenStories()
             document.getElementById("content").innerHTML = ''
             currentCategory = document.getElementById("category").value
             stories.filter(story => {
                 return currentCategory === getDomainCategory(story['domain'])
+            }).filter(story => {
+                return !hiddenIds.includes(story['id'])
             }).slice(0, 50).forEach(story => appendStory(story));
         }
 

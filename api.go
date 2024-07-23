@@ -19,6 +19,8 @@ type story struct {
 	Domain   string `json:"domain"`
 	Link     string `json:"link"`
 	Comments string `json:"comments"`
+	Descendants int `json:"descendants"`
+	Score    int    `json:"score"`
 }
 
 var ids []int
@@ -90,13 +92,20 @@ func getStoryDetails(id int) story {
 
 	title, title_ok := result["title"].(string)
 	link, link_ok := result["url"].(string)
+	descendants, desc_ok := result["descendants"].(float64)
+	// figured out these were floats via:
+	// switch v := result["score"].(type) { 
+    // default:
+    //     fmt.Printf("unexpected type %T", v)
+	// }
+	score, score_ok := result["score"].(float64)
 
-	if title_ok && link_ok {
+	if title_ok && link_ok && desc_ok && score_ok {
 		story_url, _ := url.Parse(link)
 		hn_url := []string{"https://news.ycombinator.com/item?id=", strconv.Itoa(id)}
 
 		return story{
-			ID: id, Title: title, Domain: story_url.Hostname(), Link: link, Comments: strings.Join(hn_url, ""),
+			ID: id, Title: title, Domain: story_url.Hostname(), Link: link, Comments: strings.Join(hn_url, ""), Descendants: int(descendants), Score: int(score),
 		}
 	} else {
 		return story{}

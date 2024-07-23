@@ -186,7 +186,7 @@
             d.appendChild(p1);
 
             let a = document.createElement('a')
-            a.innerHTML = story['title']
+            a.innerHTML = '[' + story['score'] + '] ' + story['title']
             a.href = story['link']
             p1.appendChild(a)
 
@@ -195,7 +195,7 @@
             p1.appendChild(s1);
 
             let comments = document.createElement('a')
-            comments.innerHTML = '(comments)'
+            comments.innerHTML = '(' + story['descendants'] + ' comments)'
             comments.href = story['comments']
             p1.appendChild(comments)
 

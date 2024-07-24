@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"fmt"
 	"sync"
+	"errors"
 )
 
 type story struct {
@@ -58,37 +59,56 @@ func isStoryReloadNeeded() bool {
 
 // Wipe and set the `ids` global from the HN API
 func updateTopStoryIds() {
-	resp, _ := http.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
-	// TODO handle error
+	resp, err := http.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
+	if err != nil {
+		return
+	}
+
 	defer resp.Body.Close()
-	body, _ := io.ReadAll(resp.Body)
-	// TODO handle error
-	_ = json.Unmarshal(body, &ids)
-	// TODO handle error
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(body, &ids)
+	if err != nil {
+		return
+	}
 }
 
 // Using the `ids` global, fetch each story and put it in the `stories` global (wipes existing stories)
 func updateTopStoryDetails() {
 	new_stories := make([]story, len(ids))
 	for _, id := range ids {
-		stories = append(stories, getStoryDetails(id))
+		new_story, err := getStoryDetails(id)
+		if err == nil {
+			stories = append(stories, new_story)
+		}
 	}
 	copy(new_stories, stories)
 }
 
 // Fetches a HN story by its ID from the API and returns a `story` struct
-func getStoryDetails(id int) story {
+func getStoryDetails(id int) (story, error) {
 	var result map[string]interface{}
 
 	req_url := []string{"https://hacker-news.firebaseio.com/v0/item/", strconv.Itoa(id), ".json"}
   
-	resp, _ := http.Get(strings.Join(req_url, ""))
-	// TODO handle error
+	resp, err := http.Get(strings.Join(req_url, ""))
+	if err != nil {
+		return story{}, errors.New("Error during Get")
+	}
+
 	defer resp.Body.Close()
-	body, _ := io.ReadAll(resp.Body)
-	// TODO handle error
-	_ = json.Unmarshal(body, &result)
-	// TODO handle error
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return story{}, errors.New("Error during ReadAll")
+	}
+
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return story{}, errors.New("Error during Unmarshal")
+	}
 
 	title, title_ok := result["title"].(string)
 	link, link_ok := result["url"].(string)
@@ -101,14 +121,18 @@ func getStoryDetails(id int) story {
 	score, score_ok := result["score"].(float64)
 
 	if title_ok && link_ok && desc_ok && score_ok {
-		story_url, _ := url.Parse(link)
+		story_url, err := url.Parse(link)
+		if err != nil {
+			return story{}, errors.New("Error during Parse")
+		}
+
 		hn_url := []string{"https://news.ycombinator.com/item?id=", strconv.Itoa(id)}
 
 		return story{
 			ID: id, Title: title, Domain: story_url.Hostname(), Link: link, Comments: strings.Join(hn_url, ""), Descendants: int(descendants), Score: int(score),
-		}
+		}, nil
 	} else {
-		return story{}
+		return story{}, errors.New("Error during Type Casting")
 	}
 }
 

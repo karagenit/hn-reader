@@ -62,30 +62,38 @@ func isStoryReloadNeeded() bool {
 func updateTopStoryIds() {
 	resp, err := http.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 
 	err = json.Unmarshal(body, &ids)
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 }
 
 // Using the `ids` global, fetch each story and put it in the `stories` global (wipes existing stories)
 func updateTopStoryDetails() {
-	new_stories := make([]story, len(ids))
+	//new_stories := make([]story, len(ids))
+	//var new_stories []story
+	new_stories := []story{}
 	for _, id := range ids {
 		new_story, err := getStoryDetails(id)
 		if err == nil {
 			stories = append(stories, new_story)
+		//} else {
+			//fmt.Println(err)
 		}
 	}
+	stories = make([]story, len(new_stories))
 	copy(new_stories, stories)
 }
 
@@ -133,7 +141,8 @@ func getStoryDetails(id int) (story, error) {
 			ID: id, Title: title, Domain: story_url.Hostname(), Link: link, Comments: strings.Join(hn_url, ""), Descendants: int(descendants), Score: int(score),
 		}, nil
 	} else {
-		return story{}, errors.New("Error during Type Casting")
+		err_strs := []string{"Error during Type Casting:", strconv.FormatBool(title_ok), strconv.FormatBool(link_ok), strconv.FormatBool(desc_ok), strconv.FormatBool(score_ok)}
+		return story{}, errors.New(strings.Join(err_strs, " "))
 	}
 }
 

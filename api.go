@@ -28,7 +28,7 @@ var ids []int
 
 var stories []story
 
-var last_update int64
+var last_update int64 // TODO need to be atomic?
 
 var global_mutex sync.Mutex
 
@@ -46,10 +46,11 @@ func getTopStories(c *gin.Context) {
 func updateTopStories() {
 	global_mutex.Lock() // TODO would be nice to just return here instead of blocking, so simultaneous user requests don't result in us hitting the API back to back. Could try to use onceFunc or something. Or just a second check to isReloadNeeded inside this function too, inside the mutex lock
 	defer global_mutex.Unlock()
+	fmt.Println(time.Now(), " Starting to update stories")
 	last_update = time.Now().Unix()
 	updateTopStoryIds()
 	updateTopStoryDetails()
-	fmt.Println("Finished updating stories.")
+	fmt.Println(time.Now(), " Finished updating stories")
 }
 
 // Whether or not we should update the stories - runs every 15 mins

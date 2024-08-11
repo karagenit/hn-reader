@@ -21,11 +21,11 @@
     </div>
 
     <div>
-        <button>Save</button>
+        <button onclick="saveCategories()">Save</button>
     </div>
 
     <script>
-        let categories = [];
+        let categories = {};
         storedCategories = localStorage.getItem("categories");
 
         if (storedCategories) {
@@ -33,6 +33,27 @@
         }
 
         saveCategories = function() {
+            newCategories = {}
+            Array.from(document.getElementsByTagName('input')).forEach(input => {
+                newName = input.value
+                oldName = input.id
+                // if there's no input value, we skip it because this means the user wants to delete it
+                if (newName) {
+                    // if it doesn't already exist, we create it
+                    if (!newCategories[newName]) {
+                        newCategories[newName] = []
+                    }
+                    // if it was an existing category, copy over the old domains
+                    if (oldName) {
+                        newCategories[newName].push(...categories[oldName])
+                    }
+                }
+            })
+
+            categories = newCategories
+            // TODO once we've verified it works, uncomment this
+            //localStorage.setItem('categories', JSON.stringify(categories))
+            console.log(categories)
             displayCategories()
         }
 

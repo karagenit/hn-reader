@@ -53,16 +53,12 @@
             })
 
             categories = newCategories
-            // TODO once we've verified it works, uncomment this
-            //localStorage.setItem('categories', JSON.stringify(categories))
+            localStorage.setItem('categories', JSON.stringify(categories))
             console.log(categories)
             displayCategories()
         }
 
         addNewCategoryInput = function (target) {
-            // if (target) {
-            //     target.removeEventListener('change', wrappedChangeHandler)
-            // }
             this.removeEventListener('change', addNewCategoryInput)
 
             let input = document.createElement('input')

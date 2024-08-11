@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Caleb's HN Reader</title>
+    <style>
+        #content input {
+            margin-bottom: 1rem;
+        }
+    </style>
+  </head>
+  <body>
+    <div>
+        <a href="/">Home</a>
+        <p>You can rename existing categories to keep the domains in that category. You can also leave the category name blank to delete the category. Naming two categories the same thing will combine them into one.</p>
+    </div>
+    
+    <div id="content">
+        <p>Loading...</p>
+    </div>
+
+    <div>
+        <button>Save</button>
+    </div>
+
+    <script>
+        let categories = [];
+        storedCategories = localStorage.getItem("categories");
+
+        if (storedCategories) {
+            categories = JSON.parse(storedCategories)
+        }
+
+        saveCategories = function() {
+            displayCategories()
+        }
+
+        displayCategories = function() {
+            document.getElementById("content").innerHTML = ''
+            Object.keys(categories).forEach(category => {
+                let input = document.createElement('input')
+                input.type = 'text'
+                input.placeholder = category
+                input.id = category
+                input.value = category
+                document.getElementById("content").appendChild(input)
+
+                let br = document.createElement('br')
+                document.getElementById("content").appendChild(br)
+            })
+        }
+
+        displayCategories()
+    </script>
+  </body>
+</html>

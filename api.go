@@ -152,6 +152,7 @@ func main() {
 	go updateTopStories()
 	router := gin.Default()
 	router.StaticFile("/", "./index.html") // just .Static tries to wildcard the whole route...
+	router.StaticFile("/settings", "./settings.html")
 	router.GET("/stories", getTopStories)
 	router.Run("localhost:8080")
 }

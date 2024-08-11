@@ -7,6 +7,8 @@
     <style>
         #content input {
             margin-bottom: 1rem;
+            width: 24em;
+            max-width: 100%;
         }
     </style>
   </head>
@@ -57,12 +59,29 @@
             displayCategories()
         }
 
+        addNewCategoryInput = function (target) {
+            // if (target) {
+            //     target.removeEventListener('change', wrappedChangeHandler)
+            // }
+            this.removeEventListener('change', addNewCategoryInput)
+
+            let input = document.createElement('input')
+            input.type = 'text'
+            input.placeholder = 'Add a new category here...'
+            input.addEventListener(
+                'change',
+                addNewCategoryInput,
+                false
+            )
+            document.getElementById("content").appendChild(input)
+        }
+
         displayCategories = function() {
             document.getElementById("content").innerHTML = ''
             Object.keys(categories).forEach(category => {
                 let input = document.createElement('input')
                 input.type = 'text'
-                input.placeholder = category
+                input.placeholder = 'Previously "' + category + '" will be deleted'
                 input.id = category
                 input.value = category
                 document.getElementById("content").appendChild(input)
@@ -70,6 +89,7 @@
                 let br = document.createElement('br')
                 document.getElementById("content").appendChild(br)
             })
+            addNewCategoryInput()
         }
 
         displayCategories()

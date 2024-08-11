@@ -16,7 +16,8 @@
         }
 
         details pre {
-            overflow: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
             background-color: #ddd;
         }
 
@@ -48,8 +49,7 @@
     <div id="importexport">
         <details>
             <summary>Click to view full JSON for export</summary>
-            <pre><code id="export">{"export loading...": []}</code>
-            </pre>
+            <pre><code id="export">{"export loading...": []}</code></pre>
         </details>
 
         <textarea id="import" placeholder="Add JSON here to import"></textarea>

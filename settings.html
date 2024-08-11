@@ -10,6 +10,14 @@
             width: 24em;
             max-width: 100%;
         }
+
+        details {
+            margin-top: 1rem;
+        }
+
+        details pre {
+            overflow: auto;
+        }
     </style>
   </head>
   <body>
@@ -24,6 +32,17 @@
 
     <div>
         <button onclick="saveCategories()">Save</button>
+    </div>
+
+    <div>
+        <details>
+            <summary>Export as JSON</summary>
+            <pre>
+                <code id="export">
+                    {"export loading...": []}
+                </code>
+            </pre>
+        </details>
     </div>
 
     <script>
@@ -89,6 +108,8 @@
         }
 
         displayCategories()
+
+        document.getElementById('export').innerHTML = JSON.stringify(categories)
     </script>
   </body>
 </html>

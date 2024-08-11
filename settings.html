@@ -17,6 +17,17 @@
 
         details pre {
             overflow: auto;
+            background-color: #ddd;
+        }
+
+        textarea {
+            margin-top: 1rem;
+            width: 24em;
+            max-width: 100%;
+        }
+
+        #importexport button {
+            margin-top: 1rem;
         }
     </style>
   </head>
@@ -34,15 +45,17 @@
         <button onclick="saveCategories()">Save</button>
     </div>
 
-    <div>
+    <div id="importexport">
         <details>
-            <summary>Export as JSON</summary>
-            <pre>
-                <code id="export">
-                    {"export loading...": []}
-                </code>
+            <summary>Click to view full JSON for export</summary>
+            <pre><code id="export">{"export loading...": []}</code>
             </pre>
         </details>
+
+        <textarea id="import" placeholder="Add JSON here to import"></textarea>
+        <br>
+
+        <button onclick="importJson()">Import</button>
     </div>
 
     <script>
@@ -51,6 +64,16 @@
 
         if (storedCategories) {
             categories = JSON.parse(storedCategories)
+        }
+
+        importJson = function() {
+            imported = JSON.parse(document.getElementById('import').value)
+            // Prevent accidentally blowing up your json with a misclick
+            if (imported && Object.keys(imported).length > 0) {
+                categories = imported
+                localStorage.setItem('categories', JSON.stringify(categories))
+                displayCategories()
+            }
         }
 
         saveCategories = function() {
@@ -110,6 +133,7 @@
         displayCategories()
 
         document.getElementById('export').innerHTML = JSON.stringify(categories)
+        console.log(JSON.stringify(categories))
     </script>
   </body>
 </html>

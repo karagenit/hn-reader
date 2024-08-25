@@ -5,6 +5,8 @@ TODO
 - Cleanup frontend
 - Allow undo of hiding a story
 - After clicking a story and going back to this site, last clicked should be pinned to the top
+- Handle multiple tabs open at once and categorizing posts (currently will overwrite other tabs changes)
+- night mode
 
 
 Run app with `go run .`

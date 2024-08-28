@@ -166,8 +166,16 @@
             return Object.keys(categories).find(category => categories[category].includes(domain)) ?? ''
         }
 
+        handleClickStory = function(id, comments_url) {
+            history.replaceState(null, '', '/#id-' + id)
+            // TODO not allowed, need to create my own /redirect?comments=url endpoint to handle this ugh
+            //history.pushState(null, "", comments_url);
+            return true;
+        }
+
         appendStory = function(story) {
             let d = document.createElement('div')
+            d.id = 'id-' + story['id']
             document.getElementById("content").appendChild(d)
 
             let close = document.createElement('span')
@@ -187,6 +195,11 @@
             let a = document.createElement('a')
             a.innerHTML = '[' + story['score'] + '] ' + story['title']
             a.href = story['link']
+            a.addEventListener(
+                'click',
+                function() { handleClickStory(story['id'], story['comments']) },
+                false
+            )
             p1.appendChild(a)
 
             let s1 = document.createElement('span')
@@ -226,6 +239,11 @@
             }).filter(story => {
                 return !hiddenIds.includes(story['id'])
             }).slice(0, 50).forEach(story => appendStory(story));
+
+            // TODO instead of jumping to it should we just display this story at the top? what if it's fallen out of the top 50?
+            if (window.location.hash) {
+                document.querySelector(window.location.hash).scrollIntoView()
+            }
         }
 
         loadValues()

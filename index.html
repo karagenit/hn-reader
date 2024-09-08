@@ -234,16 +234,21 @@
             hiddenIds = getHiddenStories()
             document.getElementById("content").innerHTML = ''
             currentCategory = document.getElementById("category").value
+
+            // First, if we have window.location.hash like id-NNNNNNN, extract the number, find the matching story, and if it exists append it with appendStory
+            if (window.location.hash.startsWith('#id-')) {
+                const storyId = parseInt(window.location.hash.slice(4));
+                const story = stories.find(s => s.id === storyId);
+                if (story) {
+                    appendStory(story);
+                }
+            }
+
             stories.filter(story => {
                 return currentCategory === getDomainCategory(story['domain'])
             }).filter(story => {
                 return !hiddenIds.includes(story['id'])
             }).slice(0, 50).forEach(story => appendStory(story));
-
-            // TODO instead of jumping to it should we just display this story at the top? what if it's fallen out of the top 50?
-            if (window.location.hash) {
-                document.querySelector(window.location.hash).scrollIntoView()
-            }
         }
 
         loadValues()

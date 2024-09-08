@@ -209,6 +209,11 @@
             let comments = document.createElement('a')
             comments.innerHTML = '(' + story['descendants'] + ' comments)'
             comments.href = story['comments']
+            comments.addEventListener(
+                'click',
+                function() { handleClickStory(story['id'], story['comments']) },
+                false
+            )
             p1.appendChild(comments)
 
             let p2 = document.createElement('p')

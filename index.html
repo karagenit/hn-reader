@@ -211,65 +211,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         appendStory = function(story) {
-            let d = document.createElement('div')
-            d.id = 'id-' + story['id']
-            document.getElementById("content").appendChild(d)
+            const storyHtml = `
+                <div id="id-${story.id}">
+                    <span class="close-button" id="${story.id}">☒</span>
+                    <p>
+                        <a href="${story.link}">[${story.score}] ${story.title}</a>
+                        <span> </span>
+                        <a href="${story.comments}">(${story.descendants} comments)</a>
+                    </p>
+                    <p>
+                        <span>${story.domain}</span>
+                        <select id="${story.id}"></select>
+                    </p>
+                </div>
+            `;
 
-            let close = document.createElement('span')
-            close.innerHTML = '&#9746;'
-            close.classList = 'close-button'
-            close.id = story['id'] // TODO gonna have duplicate IDs here...
-            close.addEventListener(
-                'click',
-                function() { handleHideStory(close); },
-                false
-            );
-            d.append(close)
+            const container = document.getElementById("content");
+            container.insertAdjacentHTML('beforeend', storyHtml);
 
-            let p1 = document.createElement('p')
-            d.appendChild(p1);
+            const storyElement = container.lastElementChild;
+            const closeButton = storyElement.querySelector('.close-button');
+            const linkElement = storyElement.querySelector(`a[href="${story.link}"]`);
+            const commentsElement = storyElement.querySelector(`a[href="${story.comments}"]`);
+            const selectElement = storyElement.querySelector('select');
 
-            let a = document.createElement('a')
-            a.innerHTML = '[' + story['score'] + '] ' + story['title']
-            a.href = story['link']
-            a.addEventListener(
-                'click',
-                function() { handleClickStory(story['id'], story['comments']) },
-                false
-            )
-            p1.appendChild(a)
+            closeButton.addEventListener('click', () => handleHideStory(closeButton), false);
+            linkElement.addEventListener('click', () => handleClickStory(story.id, story.comments), false);
+            commentsElement.addEventListener('click', () => handleClickStory(story.id, story.comments), false);
 
-            let s1 = document.createElement('span')
-            s1.innerHTML = ' '
-            p1.appendChild(s1);
-
-            let comments = document.createElement('a')
-            comments.innerHTML = '(' + story['descendants'] + ' comments)'
-            comments.href = story['comments']
-            comments.addEventListener(
-                'click',
-                function() { handleClickStory(story['id'], story['comments']) },
-                false
-            )
-            p1.appendChild(comments)
-
-            let p2 = document.createElement('p')
-            d.appendChild(p2)
-
-            let s2 = document.createElement('span')
-            s2.innerHTML = story['domain'] + '&nbsp;'
-            p2.appendChild(s2)
-
-            let sel = document.createElement('select')
-            sel.id = story['id']
-            p2.appendChild(sel)
-            appendSelectOptions(sel)
-            sel.addEventListener(
-                'change',
-                function() { handleCategorizeStory(sel); },
-                false
-            );
-            sel.value = getDomainCategory(story['domain'])
+            appendSelectOptions(selectElement);
+            selectElement.addEventListener('change', () => handleCategorizeStory(selectElement), false);
+            selectElement.value = getDomainCategory(story.domain);
         }
 
         displayStories = function() {

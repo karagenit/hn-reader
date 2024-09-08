@@ -253,7 +253,7 @@
                 return currentCategory === getDomainCategory(story['domain'])
             }).filter(story => {
                 return !hiddenIds.includes(story['id'])
-            }).slice(0, 50).forEach(story => appendStory(story));
+            }).slice(0, 10).forEach(story => appendStory(story));
         }
 
         loadValues()

@@ -4,10 +4,11 @@ Simple Hacker News Reader With Categories
 TODO
 - Cleanup frontend
 - Allow undo of hiding a story
-- After clicking a story and going back to this site, last clicked should be pinned to the top
 - Handle multiple tabs open at once and categorizing posts (currently will overwrite other tabs changes)
-- night mode
+- aggregate stats (opt-in) for other users to create primary categorization list for new users
+- LLM categorization based on existing training data
 
+## How to run
 
 Run app with `go run .`
 

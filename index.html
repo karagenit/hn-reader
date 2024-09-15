@@ -249,20 +249,23 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById("content").innerHTML = ''
             currentCategory = document.getElementById("category").value
 
-            // First, if we have window.location.hash like id-NNNNNNN, extract the number, find the matching story, and if it exists append it with appendStory
-            if (window.location.hash.startsWith('#id-')) {
-                const storyId = parseInt(window.location.hash.slice(4));
-                const story = stories.find(s => s.id === storyId);
-                if (story) {
-                    appendStory(story);
-                }
-            }
-
-            stories.filter(story => {
+            let filteredStories = stories.filter(story => {
                 return currentCategory === getDomainCategory(story['domain'])
             }).filter(story => {
                 return !hiddenIds.includes(story['id'])
-            }).slice(0, 10).forEach(story => appendStory(story));
+            });
+
+            if (window.location.hash.startsWith('#id-')) {
+                const storyId = parseInt(window.location.hash.slice(4));
+                const storyIndex = filteredStories.findIndex(story => story.id === storyId);
+                if (storyIndex !== -1) {
+                    const [story] = filteredStories.splice(storyIndex, 1);
+                    filteredStories.unshift(story);
+                }
+                
+            }
+            
+            filteredStories.slice(0, 10).forEach(story => appendStory(story));
         }
 
         loadValues()

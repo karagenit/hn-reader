@@ -45,7 +45,7 @@
   <body>
     <div>
         <span>Posts in </span>
-        <select id="category" onchange="displayStories()"></select>
+        <select id="category" onchange="handleMainCategoryChange()"></select>
         <span class="links">
                     <a href="#" onclick="toggleDarkMode(); return false;">&#9728;</a>
               
@@ -268,8 +268,22 @@ document.addEventListener('DOMContentLoaded', function() {
             filteredStories.slice(0, 10).forEach(story => appendStory(story));
         }
 
-        loadValues()
+        handleMainCategoryChange = function() {
+            const categorySelect = document.getElementById("category");
+            localStorage.setItem("lastCategory", categorySelect.value);
+            displayStories();
+        }
+
         appendSelectOptions(document.getElementById("category"))
+
+        const lastCategory = localStorage.getItem('lastCategory');
+        const categorySelect = document.getElementById("category");
+        // TODO could just use Object.keys(categories) instead of categorySelect.options...
+        if (lastCategory && Array.from(categorySelect.options).some(option => option.value === lastCategory)) {
+            categorySelect.value = lastCategory;
+        }
+
+        loadValues()
     </script>
   </body>
 </html>

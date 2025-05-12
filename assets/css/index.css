@@ -110,3 +110,14 @@ body {
     font-size: 1.25rem;
     color: #ba0000;
 }
+
+.domain span {
+    margin-right: 3px;
+}
+
+.domain select {
+    color: inherit;
+    background-color: inherit;
+    border: 1px solid color(display-p3 0.2824 0.8353 0.5922);
+    border-radius: 3px;
+}

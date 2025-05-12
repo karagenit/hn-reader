@@ -5,26 +5,16 @@
     <meta charset="utf-8">
     <title>Caleb's HN Reader</title>
     <link rel="stylesheet" href="/assets/css/index.css">
+    <script src="/assets/js/darkmode.js"></script>
   </head>
   <body>
     <div>
         <span>Posts in </span>
         <select id="category" onchange="handleMainCategoryChange()"></select>
         <span class="links">
-                    <a href="#" onclick="toggleDarkMode(); return false;">&#9728;</a>
-              
-<script>
-function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-}
+            <a href="#" onclick="toggleDarkMode(); return false;">&#9728;</a>
+            &nbsp;&nbsp;
 
-document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('darkMode') === 'true') {
-                document.body.classList.add('dark-mode');
-            }
-});
-</script>
 <style>
 .dark-mode {
             background-color: #1a1a1a;

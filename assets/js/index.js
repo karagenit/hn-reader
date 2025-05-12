@@ -126,6 +126,7 @@ appendStory = function(story) {
                     ${story.descendants} comments
                 </a>
             </p>
+            <hr>
             <p class="domain">
                 <span>${story.domain}</span>
                 <select id="${story.id}"></select>

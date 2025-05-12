@@ -34,18 +34,36 @@ p {
     color: #ba0000;
 }
 
+/*  */
+
+body {
+    background-color: color(display-p3 0.0314 0.0588 0.0667);
+}
+
 .toolbar {
     display: flex;
     width: 100%;
-    /* gap: 1rem; */
+    border: 1px solid color(display-p3 .1255 .302 .2314);
+    border-radius: 3px;
+    color: color(display-p3 0.2824 0.8353 0.5922);
+    background-color: color(display-p3 0.0863 0.1373 0.1333);
 }
 
 .toolbar > * {
-    padding: 0.5rem 0.75rem;
+    padding: 0.4rem 0.5rem;
 }
 
 .toolbar select {
     flex-grow: 1;
+    border: none;
+    margin-right: 0.5rem; /* to make the right dropdown arrow move in */
+    color: inherit;
+    background-color: inherit;
+}
+
+.toolbar select:focus {
+    border: none;
+    outline: none;
 }
 
 .toolbar a {
@@ -54,4 +72,5 @@ p {
     align-items: center;
     text-decoration: none;
     color: inherit;
+    border-left: 1px solid color(display-p3 0.1098 0.2157 0.1804);
 }

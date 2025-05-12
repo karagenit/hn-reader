@@ -91,18 +91,17 @@ body {
     border: 1px solid color(display-p3 0.2824 0.8353 0.5922);
     border-radius: 3px;
     padding: 1px 3px;
-    /* margin-bottom: 1px; */
-    margin-left: 3px;
     white-space: nowrap;
     font-size: 12px;
 }
 
 .story-link {
-    line-height: 1.5;
+    margin-right: 3px;
 }
 
 .story p {
     margin: 0.8rem;
+    line-height: 1.5;
 }
 
 .close-button {

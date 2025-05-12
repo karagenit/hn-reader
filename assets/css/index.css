@@ -38,6 +38,8 @@ p {
 
 body {
     background-color: color(display-p3 0.0314 0.0588 0.0667);
+    font-family: SuisseIntl, -apple-system, "system-ui", Helvetica, Arial, sans-serif;
+    font-size: 14px;
 }
 
 .toolbar {
@@ -59,6 +61,8 @@ body {
     margin-right: 0.5rem; /* to make the right dropdown arrow move in */
     color: inherit;
     background-color: inherit;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 .toolbar select:focus {

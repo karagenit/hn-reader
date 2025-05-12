@@ -115,10 +115,13 @@ handleClickStory = function(id, comments_url) {
 
 appendStory = function(story) {
     const storyHtml = `
-        <div id="id-${story.id}">
+        <div class="story" id="id-${story.id}">
             <span class="close-button" id="${story.id}">☒</span>
             <p>
-                <a href="${story.link}">[${story.score}] ${story.title}</a>
+                <a class="story-link" href="${story.link}">
+                    <span class="story-score">${story.score}</span>
+                    ${story.title}
+                </a>
                 <span> </span>
                 <a href="${story.comments}">(${story.descendants} comments)</a>
             </p>

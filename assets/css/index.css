@@ -48,8 +48,10 @@ p {
     flex-grow: 1;
 }
 
-.toolbar .button {
+.toolbar a {
     display: flex;
     justify-content: center;
-    align-items: center;    
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
 }

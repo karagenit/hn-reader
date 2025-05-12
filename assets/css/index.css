@@ -77,4 +77,5 @@ body {
     text-decoration: none;
     color: inherit;
     border-left: 1px solid color(display-p3 0.1098 0.2157 0.1804);
+    max-width: 1.5rem; /* does this annoying pop in thing while the font is still loading, so it shows the text 'settings' which is longer then it shrinks when replaced by the symbol. this helps prevent that */
 }

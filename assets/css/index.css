@@ -93,3 +93,7 @@ body {
     padding: 0 3px;
     margin-right: 3px;
 }
+
+.story-link {
+    line-height: 1.5;
+}

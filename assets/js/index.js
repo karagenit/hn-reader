@@ -122,8 +122,9 @@ appendStory = function(story) {
                     <span class="story-score">${story.score}</span>
                     ${story.title}
                 </a>
-                <span> </span>
-                <a href="${story.comments}">(${story.descendants} comments)</a>
+                <a class="story-comments" href="${story.comments}">
+                    ${story.descendants} comments
+                </a>
             </p>
             <p>
                 <span>${story.domain}</span>

@@ -1,13 +1,6 @@
 
 
-#content a {
-    color: #000;
-    text-decoration: none;
-}
 
-#content a:visited {
-    color: #666;
-}
 
 #content {
     border: none;
@@ -36,6 +29,7 @@ body {
     background-color: color(display-p3 0.0314 0.0588 0.0667);
     font-family: SuisseIntl, -apple-system, "system-ui", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    color: color(display-p3 0.2824 0.8353 0.5922);
 }
 
 .toolbar {
@@ -43,7 +37,7 @@ body {
     width: 100%;
     border: 1px solid color(display-p3 .1255 .302 .2314);
     border-radius: 3px;
-    color: color(display-p3 0.2824 0.8353 0.5922);
+    /* color: color(display-p3 0.2824 0.8353 0.5922); */
     background-color: color(display-p3 0.0863 0.1373 0.1333);
 }
 
@@ -78,10 +72,16 @@ body {
 
 #content div {
     margin-top: 0.5rem;
-
     border: 1px solid color(display-p3 .1255 .302 .2314);
     border-radius: 3px;
-    color: color(display-p3 0.2824 0.8353 0.5922);
     background-color: color(display-p3 0.0863 0.1373 0.1333);
+}
 
+#content a {
+    color: inherit;
+    text-decoration: none;
+}
+
+#content a:visited {
+    color: inherit;
 }

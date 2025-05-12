@@ -33,3 +33,23 @@ p {
     font-size: 1.25rem;
     color: #ba0000;
 }
+
+.toolbar {
+    display: flex;
+    width: 100%;
+    /* gap: 1rem; */
+}
+
+.toolbar > * {
+    padding: 0.5rem 0.75rem;
+}
+
+.toolbar select {
+    flex-grow: 1;
+}
+
+.toolbar .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}

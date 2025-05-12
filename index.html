@@ -10,17 +10,15 @@
     <script src="/assets/js/darkmode.js"></script>
   </head>
   <body>
-    <div>
-        <span>Posts in </span>
+    <div class="toolbar">
         <select id="category" onchange="handleMainCategoryChange()"></select>
-        <span class="links">
-            <a href="#" onclick="toggleDarkMode(); return false;">&#9728;</a>
-            &nbsp;&nbsp;          
+        <div class="button">
             <a href="https://caleb.software/posts/hn-reader.html">Why</a>
-            &nbsp;&nbsp;
+        </div>
+        <div class="button">
             <a href="/settings">Settings</a>
-        </span>
-    </div>
+        </div>
+      </div>
     
     <div id="content">
         <p>Loading...</p>

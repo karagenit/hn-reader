@@ -1,0 +1,24 @@
+.dark-mode {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.dark-mode #content a {
+    color: #ffffff;
+}
+
+.dark-mode #content a:visited {
+    color: #cccccc;
+}
+
+.dark-mode #content div {
+    border-color: #555555;
+}
+
+.dark-mode .links a {
+color: #66b3ff;
+}
+
+.dark-mode .links a:visited {
+color: #3399ff;
+}

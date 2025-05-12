@@ -8,12 +8,15 @@
     <link rel="stylesheet" href="/assets/css/darkmode.css">
     <script src="/assets/js/index.js"></script>
     <script src="/assets/js/darkmode.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,-25&icon_names=settings" />
+    <!-- this was tricky, you can't have multiple of these imports, LLM said to do settings,help but it has to be alphabetical! -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,-25&icon_names=help,settings" />
   </head>
   <body>
     <div class="toolbar">
         <select id="category" onchange="handleMainCategoryChange()"></select>
-        <a href="https://caleb.software/posts/hn-reader.html">(?)</a>
+        <a href="https://caleb.software/posts/hn-reader.html">
+            <span class="material-symbols-outlined">help</span>
+        </a>
         <a href="/settings">
             <span class="material-symbols-outlined">settings</span>
         </a>

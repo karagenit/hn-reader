@@ -1,8 +1,4 @@
-#content div {
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    margin-top: 0.5rem;
-}
+
 
 #content a {
     color: #000;
@@ -34,7 +30,7 @@ p {
     color: #ba0000;
 }
 
-/*  */
+/* updated styles */
 
 body {
     background-color: color(display-p3 0.0314 0.0588 0.0667);
@@ -78,4 +74,14 @@ body {
     color: inherit;
     border-left: 1px solid color(display-p3 0.1098 0.2157 0.1804);
     max-width: 1.5rem; /* does this annoying pop in thing while the font is still loading, so it shows the text 'settings' which is longer then it shrinks when replaced by the symbol. this helps prevent that */
+}
+
+#content div {
+    margin-top: 0.5rem;
+
+    border: 1px solid color(display-p3 .1255 .302 .2314);
+    border-radius: 3px;
+    color: color(display-p3 0.2824 0.8353 0.5922);
+    background-color: color(display-p3 0.0863 0.1373 0.1333);
+
 }

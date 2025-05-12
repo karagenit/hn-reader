@@ -153,6 +153,7 @@ func main() {
 	router := gin.Default()
 	router.StaticFile("/", "./index.html") // just .Static tries to wildcard the whole route...
 	router.StaticFile("/settings", "./settings.html")
+	router.Static("/assets", "./assets")
 	router.GET("/stories", getTopStories)
 	router.Run("localhost:8080")
 }

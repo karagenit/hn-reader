@@ -1,0 +1,35 @@
+#content div {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+}
+
+#content a {
+    color: #000;
+    text-decoration: none;
+}
+
+#content a:visited {
+    color: #666;
+}
+
+#content {
+    border: none;
+    margin-top: 0;
+    padding: 0;
+}
+
+p {
+    margin: 1rem;
+}
+
+.links {
+    float: right;
+}
+
+.close-button {
+    float: right;
+    padding: 0.75rem;
+    font-size: 1.25rem;
+    color: #ba0000;
+}

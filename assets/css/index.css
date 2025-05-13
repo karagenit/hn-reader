@@ -27,7 +27,6 @@ body {
 
 .toolbar {
     display: flex;
-    width: 100%;
     border: 1px solid color(display-p3 .1255 .302 .2314);
     border-radius: 3px;
     /* color: color(display-p3 0.2824 0.8353 0.5922); */

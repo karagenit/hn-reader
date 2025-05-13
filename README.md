@@ -34,3 +34,22 @@ disown
 To kill
 
 lsof -i :8080 then kill the 'api' pid listed
+
+## Web Components Redesign
+
+- categorySelector
+  - static block to load category list from localStorage
+    - default values fallback
+  - onchange fires event up to parent
+- storyList
+  - constructor loads hidden stories from storage
+    - calls purge
+    - default values fallback
+  - constructor loads story categorizations from storage
+    - validate, what if some are invalid categories?
+    - default values fallback
+  - connected callback fires async fetch of data
+    - when done, render list to doc fragemnt then append
+    - add listeners for hide and recategorize on each story
+  - connected callback attached listener to document category change
+- story

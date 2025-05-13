@@ -23,23 +23,23 @@ if (storedHiddenStories) {
     hiddenStories = JSON.parse(storedHiddenStories);
 }
 
-getHiddenStories = function() {
+const getHiddenStories = function() {
     return Object.keys(hiddenStories).map(date => {
         return hiddenStories[date];
     }).flat();
 }
 
-addHiddenStory = function(id) {
-    today = getTodayDayNumber()
+const addHiddenStory = function(id) {
+    let today = getTodayDayNumber()
     if (!hiddenStories[today]) {
         hiddenStories[today] = []
     }
     hiddenStories[today].push(parseInt(id));
 }
 
-saveHiddenStories = function() {
+const saveHiddenStories = function() {
     // Only save the last 7 days worth of hidden stories so we don't blow up our local storage over time
-    today = getTodayDayNumber()
+    let today = getTodayDayNumber()
     Object.keys(hiddenStories).forEach(date => {
         if (date < today - 7) {
             delete hiddenStories[date];
@@ -48,21 +48,21 @@ saveHiddenStories = function() {
     localStorage.setItem('hiddenStories', JSON.stringify(hiddenStories))
 }
 
-getTodayDayNumber = function() {
+const getTodayDayNumber = function() {
     return Math.floor(Date.now() / (1000 * 60 * 60 * 24));
 }
 
-loadValues = async function() {
-    res = await fetch('/stories')
+const loadValues = async function() {
+    let res = await fetch('/stories')
     stories = await res.json()
     displayStories()
 }
 
-handleCategorizeStory = function(sel) {
-    id = sel.id
-    category = sel.value
-    story = stories.find(story => story.id == id) // == not === because story.id is an int but id is a string
-    domain = story['domain']
+const handleCategorizeStory = function(sel) {
+    let id = sel.id
+    let category = sel.value
+    let story = stories.find(story => story.id == id) // == not === because story.id is an int but id is a string
+    let domain = story['domain']
 
     Object.keys(categories).forEach(category => {
         let i = categories[category].indexOf(domain)
@@ -81,14 +81,14 @@ handleCategorizeStory = function(sel) {
     localStorage.setItem('categories', JSON.stringify(categories))
 }
 
-handleHideStory = function(button) {
-    id = button.id
+const handleHideStory = function(button) {
+    let id = button.id
     addHiddenStory(id)
     displayStories()
     saveHiddenStories()
 }
 
-appendSelectOptions = function(element) {
+const appendSelectOptions = function(element) {
     let uncategorized = document.createElement("option")
     uncategorized.value = ''
     uncategorized.text = 'Uncategorized'
@@ -102,18 +102,18 @@ appendSelectOptions = function(element) {
     });
 }
 
-getDomainCategory = function(domain) {
+const getDomainCategory = function(domain) {
     return Object.keys(categories).find(category => categories[category].includes(domain)) ?? ''
 }
 
-handleClickStory = function(id, comments_url) {
+const handleClickStory = function(id, comments_url) {
     history.replaceState(null, '', '/#id-' + id)
     // TODO not allowed, need to create my own /redirect?comments=url endpoint to handle this ugh
     //history.pushState(null, "", comments_url);
     return true;
 }
 
-appendStory = function(story) {
+const appendStory = function(story) {
     const storyHtml = `
         <div class="story" id="id-${story.id}">
             <span class="close-button" id="${story.id}">☒</span>
@@ -152,10 +152,10 @@ appendStory = function(story) {
     selectElement.value = getDomainCategory(story.domain);
 }
 
-displayStories = function() {
-    hiddenIds = getHiddenStories()
+const displayStories = function() {
+    let hiddenIds = getHiddenStories()
     document.getElementById("content").innerHTML = ''
-    currentCategory = document.getElementById("category").value
+    let currentCategory = document.getElementById("category").value
 
     let filteredStories = stories.filter(story => {
         return currentCategory === getDomainCategory(story['domain'])
@@ -176,14 +176,15 @@ displayStories = function() {
     filteredStories.slice(0, 10).forEach(story => appendStory(story));
 }
 
-handleMainCategoryChange = function() {
+const handleMainCategoryChange = function() {
     const categorySelect = document.getElementById("category");
     localStorage.setItem("lastCategory", categorySelect.value);
     displayStories();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    appendSelectOptions(document.getElementById("category"))
+    appendSelectOptions(document.getElementById("category"));
+    document.getElementById("category").addEventListener('change', handleMainCategoryChange, false);
 
     const lastCategory = localStorage.getItem('lastCategory');
     const categorySelect = document.getElementById("category");

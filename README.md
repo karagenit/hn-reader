@@ -17,6 +17,8 @@ TODO
 - Closed [X] list: instead of clearing entry after 7 days, just clear it when it's no longer in our result data set (ie it's now irrelevant)
 - Lag - maybe render the entire list in Go as plain HTML, then set display: none on some divs in JS. Maybe favicon fixed this? Problem sometiems is reproducible by doing clear cache and hard reload...
 - fefactor js into modules, cleanup functions etc.
+- script for running & killing app
+- always hide null id stories
 
 ## How to run
 
@@ -28,3 +30,7 @@ How to run in production mode? Need ENV VAR and run in background..
 /usr/local/go/bin/go run . >>log.txt 2>&1 &
 disown
 ```
+
+To kill
+
+lsof -i :8080 then kill the 'api' pid listed

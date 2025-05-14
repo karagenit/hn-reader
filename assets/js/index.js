@@ -2,20 +2,6 @@ import { defineCategorySelector } from "./categorySelector.js";
 import categoryStore from "./categoryStore.js";
 
 let stories = [];
-let categories = {
-    "Technology": [],
-    "Interesting": [],
-    "Business": [],
-    "Science": [],
-    "Projects & Companies": [],
-    "Garbage": []
-}
-
-let storedCategories = localStorage.getItem("categories");
-
-if (storedCategories) {
-    categories = JSON.parse(storedCategories)
-}
 
 // Map of Date -> Array of story IDs
 let hiddenStories = {};
@@ -85,7 +71,7 @@ const appendSelectOptions = function(element) {
     uncategorized.text = 'Uncategorized'
     element.appendChild(uncategorized)
 
-    Object.keys(categories).forEach(category => {
+    categoryStore.categories.forEach(category => {
         let opt = document.createElement("option")
         opt.value = category
         opt.text = category

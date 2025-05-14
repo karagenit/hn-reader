@@ -27,5 +27,11 @@ export default {
             }
         });
         localStorage.setItem('hiddenStories', JSON.stringify(hiddenStories))
+    },
+    isStoryHidden(id) {
+        return Object.keys(hiddenStories)
+            .map(date => hiddenStories[date])
+            .flat()
+            .includes(id);
     }
 };

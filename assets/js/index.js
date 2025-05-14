@@ -89,15 +89,12 @@ const appendStory = function(story) {
 }
 
 const displayStories = function() {
-    let hiddenIds = hiddenStore.getHiddenStories()
     document.getElementById("content").innerHTML = ''
     let currentCategory = document.getElementById("category").value
 
     let filteredStories = stories.filter(story => {
         return currentCategory === categoryStore.getCategoryForDomain(story['domain'])
-    }).filter(story => {
-        return !hiddenIds.includes(story['id'])
-    });
+    }).filter(story => !hiddenStore.isStoryHidden(story['id']));
 
     if (window.location.hash.startsWith('#id-')) {
         const storyId = parseInt(window.location.hash.slice(4));

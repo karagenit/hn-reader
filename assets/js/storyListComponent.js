@@ -27,6 +27,7 @@ export default class StoryListComponent extends HTMLElement {
 
         let currentCategory = document.getElementById("category").value
     
+        // TODO also filter by having a valid ID and title
         let filteredStories = this.#storyListData.filter(story => {
             return currentCategory === categoryStore.getCategoryForDomain(story['domain'])
         }).filter(story => !hiddenStore.isStoryHidden(story['id']));
@@ -63,7 +64,7 @@ export default class StoryListComponent extends HTMLElement {
                 return true;
             }, false);
 
-            const selectElement = storyElement.querySelector('category-selector');
+            const selectElement = storyElement.querySelector('story-category-selector');
             selectElement.addEventListener('change', (event) => {
                 categoryStore.moveDomainToCategory(story.domain, event.target.value);
                 this.render();

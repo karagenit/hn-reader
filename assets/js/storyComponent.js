@@ -1,3 +1,5 @@
+import StoryCategorySelector from "./storyCategorySelectorComponent.js";
+
 export default class StoryComponent extends HTMLElement {
     #storyData;
 
@@ -17,6 +19,7 @@ export default class StoryComponent extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        this.addEventListener('storyCategoryChange', (e) => console.log(e), false);
     }
 
     render() {
@@ -37,7 +40,7 @@ export default class StoryComponent extends HTMLElement {
                     <hr>
                     <p class="domain">
                         <span>${this.storyData.domain}</span>
-                        <category-selector id="${this.storyData.id}"></category-selector>
+                        <story-category-selector id="${this.storyData.id}"></category-selector>
                     </p>
                 </div>
             `;

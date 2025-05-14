@@ -15,12 +15,16 @@ export default class CategorySelector extends HTMLElement {
         this.appendChild(select);
     }
 
+    get selectElement() {
+        return this.querySelector('select')
+    }
+
     get value() {
-        return this.querySelector('select').value;
+        return this.selectElement.value;
     }
 
     set value(value) {
-        this.querySelector('select').value = value;
+        this.selectElement.value = value;
     }
 
     get options() {

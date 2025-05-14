@@ -46,12 +46,8 @@ export default class StoryListComponent extends HTMLElement {
             const storyElement = document.createElement('x-story');
             this.append(storyElement); // would rather use a fragment and append all at once, but attaching listeners doesn't work until they're on the DOM
             storyElement.storyData = story;
-        
-            // storyElement.querySelector('.close-button').addEventListener('click', () => {
-            //     hiddenStore.hideStory(story.id);
-            //     this.render();
-            // }, false);
 
+            // TODO migrate these to their own 'story-link' web components
             storyElement.querySelector(`a[href="${story.link}"]`).addEventListener('click', () => {
                 history.replaceState(null, '', '/#id-' + story.id);
                 return true;
@@ -61,9 +57,6 @@ export default class StoryListComponent extends HTMLElement {
                 history.replaceState(null, '', '/#id-' + story.id);
                 return true;
             }, false);
-
-            // const selectElement = storyElement.querySelector('story-category-selector');
-            // selectElement.value = categoryStore.getCategoryForDomain(story.domain);
         });
     }
 }

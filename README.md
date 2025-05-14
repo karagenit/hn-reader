@@ -19,6 +19,7 @@ TODO
 - fefactor js into modules, cleanup functions etc.
 - script for running & killing app
 - always hide null id stories
+- X button needs hand on hover not text pointer
 
 ## How to run
 

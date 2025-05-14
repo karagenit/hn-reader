@@ -5,13 +5,14 @@ import categoryStore from "./categoryStore.js";
 export default class CategorySelector extends HTMLElement {
     connectedCallback() {
         const select = document.createElement('select');
+        // Set the options for the select based on available categories
         this.options.forEach(({ label, value }) => {
             const option = document.createElement('option');
             option.value = value;
             option.textContent = label;
             select.appendChild(option);
         });
-
+        // Set the default value of the select based on our 'value' attr
         select.value = this.getAttribute('value') ?? '';
         this.appendChild(select);
     }
@@ -27,16 +28,6 @@ export default class CategorySelector extends HTMLElement {
     set value(value) {
         if (this.selectElement) {
             this.selectElement.value = value;
-        }
-    }
-
-    static get observedAttributes() {
-        return ['value'];
-    }
-
-    attributeChangedCallback(name, _, value) {
-        if (name === 'value') {
-            this.value = value;
         }
     }
     

@@ -27,11 +27,19 @@ export default class StoryComponent extends HTMLElement {
         // Or storyList can use the ID to lookup that story's domain?
         this.addEventListener('storyCategoryChange', (event) => {
             categoryStore.moveDomainToCategory(this.#storyData.domain, event.detail.category);
+            this.emitReloadList();
         }, false);
 
         this.addEventListener('storyHide', () => {
             hiddenStore.hideStory(this.storyData.id);
+            this.emitReloadList();
         }, false);
+    }
+
+    emitReloadList() {
+        this.dispatchEvent(new CustomEvent('storyListReload', {
+            bubbles: true
+        }));
     }
 
     render() {

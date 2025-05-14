@@ -13,7 +13,7 @@ export default class StoryCategorySelector extends CategorySelector {
                     bubbles: true
                 })
             )
-        })
+        });
     }
 }
 

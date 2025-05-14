@@ -14,6 +14,7 @@ export default class StoryListComponent extends HTMLElement {
     connectedCallback() {
         this.fetchData();
         document.getElementById('category').addEventListener('change', this.render.bind(this), false);
+        this.addEventListener('storyCategoryChange', this.render.bind(this), false);
     }
 
     async fetchData() {
@@ -65,10 +66,10 @@ export default class StoryListComponent extends HTMLElement {
             }, false);
 
             const selectElement = storyElement.querySelector('story-category-selector');
-            selectElement.addEventListener('change', (event) => {
-                categoryStore.moveDomainToCategory(story.domain, event.target.value);
-                this.render();
-            }, false);
+            // selectElement.addEventListener('change', (event) => {
+            //     categoryStore.moveDomainToCategory(story.domain, event.target.value);
+            //     this.render();
+            // }, false);
             selectElement.value = categoryStore.getCategoryForDomain(story.domain);
         });
     }

@@ -1,4 +1,5 @@
 import StoryCategorySelector from "./storyCategorySelectorComponent.js";
+import categoryStore from "./categoryStore.js";
 
 export default class StoryComponent extends HTMLElement {
     #storyData;
@@ -19,7 +20,11 @@ export default class StoryComponent extends HTMLElement {
 
     connectedCallback() {
         this.render();
-        this.addEventListener('storyCategoryChange', (e) => console.log(e), false);
+        // TODO don't really like that we have this event handled both in story and storyList
+        // Maybe domain should be stored in storyCategorySelector and it can update the store?
+        this.addEventListener('storyCategoryChange', (event) => {
+            categoryStore.moveDomainToCategory(this.#storyData.domain, event.detail.category);
+        }, false);
     }
 
     render() {
@@ -44,6 +49,7 @@ export default class StoryComponent extends HTMLElement {
                     </p>
                 </div>
             `;
+            // TODO set category selector value here?
         }
     }
 }

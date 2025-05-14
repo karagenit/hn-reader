@@ -23,9 +23,8 @@ const handleCategorizeStory = function(sel) {
 
 const handleHideStory = function(button) {
     let id = button.id
-    hiddenStore.addHiddenStory(id)
+    hiddenStore.hideStory(id)
     displayStories()
-    hiddenStore.saveHiddenStories()
 }
 
 const appendSelectOptions = function(element) {

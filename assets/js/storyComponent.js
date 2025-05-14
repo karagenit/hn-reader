@@ -1,5 +1,4 @@
-
-class StoryComponent extends HTMLElement {
+export default class StoryComponent extends HTMLElement {
     #storyData;
 
     constructor() {
@@ -47,6 +46,4 @@ class StoryComponent extends HTMLElement {
 }
 
 // Do we need to export this as a function? Or can we just rip it?
-export const defineStoryComponent = () => {
-    customElements.define('x-story', StoryComponent);
-}
+customElements.define('x-story', StoryComponent);

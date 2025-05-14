@@ -1,5 +1,5 @@
 import { defineCategorySelector } from "./categorySelector.js";
-import { defineStoryComponent } from "./storyComponent.js";
+import StoryComponent from "./storyComponent.js";
 import categoryStore from "./categoryStore.js";
 import hiddenStore from "./hiddenStore.js";
 
@@ -102,8 +102,6 @@ document.addEventListener('DOMContentLoaded', function() {
         categoryStore.lastCategory = event.target.value;
     }, false);
     mainCategorySelector.value = categoryStore.lastCategory;
-
-    defineStoryComponent();
     
     loadValues()
 });

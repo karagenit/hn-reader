@@ -13,8 +13,14 @@ if (storedCategories) {
     categories = JSON.parse(storedCategories)
 }
 
+let lastCategory = localStorage.getItem('lastCategory') ?? '';
+// TODO validate that lastCategory is one of the real keys in categories?
+
 export default {
     getCategories() {
-        return Object.keys(categories)
+        return Object.keys(categories);
+    },
+    getLastCategory() {
+        return lastCategory;
     }
 }

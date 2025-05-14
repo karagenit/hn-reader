@@ -54,3 +54,5 @@ lsof -i :8080 then kill the 'api' pid listed
     - add listeners for hide and recategorize on each story
   - connected callback attached listener to document category change
 - story
+
+Right now /js is at 317 lines, but the old index.js was only 196 :(

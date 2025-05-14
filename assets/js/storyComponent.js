@@ -31,6 +31,7 @@ export default class StoryComponent extends HTMLElement {
     render() {
         // TODO move styles here
         if (this.storyData) {
+            const categorySelectorValue = categoryStore.getCategoryForDomain(this.storyData.domain);
             this.innerHTML = `
                 <div class="story" id="id-${this.storyData.id}">
                     <span class="close-button" id="${this.storyData.id}">☒</span>
@@ -46,11 +47,10 @@ export default class StoryComponent extends HTMLElement {
                     <hr>
                     <p class="domain">
                         <span>${this.storyData.domain}</span>
-                        <story-category-selector></story-category-selector>
+                        <story-category-selector value="${categorySelectorValue}"></story-category-selector>
                     </p>
                 </div>
             `;
-            // TODO set category selector value here?
         }
     }
 }

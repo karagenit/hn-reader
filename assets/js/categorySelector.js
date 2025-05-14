@@ -12,6 +12,7 @@ export default class CategorySelector extends HTMLElement {
             select.appendChild(option);
         });
 
+        select.value = this.getAttribute('value') ?? '';
         this.appendChild(select);
     }
 
@@ -20,13 +21,25 @@ export default class CategorySelector extends HTMLElement {
     }
 
     get value() {
-        return this.selectElement.value;
+        return this.selectElement?.value;
     }
 
     set value(value) {
-        this.selectElement.value = value;
+        if (this.selectElement) {
+            this.selectElement.value = value;
+        }
     }
 
+    static get observedAttributes() {
+        return ['value'];
+    }
+
+    attributeChangedCallback(name, _, value) {
+        if (name === 'value') {
+            this.value = value;
+        }
+    }
+    
     get options() {
         // Turn the list of strings into a list of { 'category': 'category' } objs
         let categories = categoryStore.categories;

@@ -65,8 +65,8 @@ export default class StoryListComponent extends HTMLElement {
                 return true;
             }, false);
 
-            const selectElement = storyElement.querySelector('story-category-selector');
-            selectElement.value = categoryStore.getCategoryForDomain(story.domain);
+            // const selectElement = storyElement.querySelector('story-category-selector');
+            // selectElement.value = categoryStore.getCategoryForDomain(story.domain);
         });
     }
 }

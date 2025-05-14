@@ -67,21 +67,9 @@ const handleCategorizeStory = function(sel) {
     let story = stories.find(story => story.id == id) // == not === because story.id is an int but id is a string
     let domain = story['domain']
 
-    Object.keys(categories).forEach(category => {
-        let i = categories[category].indexOf(domain)
-        if (i > -1) {
-            categories[category].splice(i, 1) // remove 1 element at this index
-        }
-    })
-
-    // Add the domain to the newly selected category, unless it's the Uncategorized category (which doesn't exist in our map)
-    if (categories[category]) {
-        categories[category].push(domain)
-    }
+    categoryStore.moveDomainToCategory(domain, category);
 
     displayStories()
-
-    localStorage.setItem('categories', JSON.stringify(categories))
 }
 
 const handleHideStory = function(button) {
@@ -106,7 +94,7 @@ const appendSelectOptions = function(element) {
 }
 
 const getDomainCategory = function(domain) {
-    return Object.keys(categories).find(category => categories[category].includes(domain)) ?? ''
+    return categoryStore.getCategoryForDomain(domain);
 }
 
 const handleClickStory = function(id, comments_url) {

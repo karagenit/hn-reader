@@ -1,10 +1,7 @@
 let hiddenStories = {};
-
-let storedHiddenStories = localStorage.getItem("hiddenStories");
-
-if (storedHiddenStories) {
-    hiddenStories = JSON.parse(storedHiddenStories);
-}
+try {
+    hiddenStories = JSON.parse(localStorage.getItem('hiddenStories'));
+} catch (e) {}
 
 const getTodayDayNumber = () => Math.floor(Date.now() / (1000 * 60 * 60 * 24));
 

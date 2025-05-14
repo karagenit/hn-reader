@@ -64,7 +64,7 @@ const appendStory = function(story) {
             <hr>
             <p class="domain">
                 <span>${story.domain}</span>
-                <select id="${story.id}"></select>
+                <category-selector id="${story.id}"></category-selector>
             </p>
         </div>
     `;
@@ -76,13 +76,13 @@ const appendStory = function(story) {
     const closeButton = storyElement.querySelector('.close-button');
     const linkElement = storyElement.querySelector(`a[href="${story.link}"]`);
     const commentsElement = storyElement.querySelector(`a[href="${story.comments}"]`);
-    const selectElement = storyElement.querySelector('select');
+    const selectElement = storyElement.querySelector('category-selector');
 
     closeButton.addEventListener('click', () => handleHideStory(closeButton), false);
     linkElement.addEventListener('click', () => handleClickStory(story.id, story.comments), false);
     commentsElement.addEventListener('click', () => handleClickStory(story.id, story.comments), false);
 
-    appendSelectOptions(selectElement);
+    // appendSelectOptions(selectElement);
     selectElement.addEventListener('change', () => handleCategorizeStory(selectElement), false);
     selectElement.value = categoryStore.getCategoryForDomain(story.domain);
 }

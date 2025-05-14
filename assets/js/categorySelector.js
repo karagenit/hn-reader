@@ -3,15 +3,8 @@ import categoryStore from "./categoryStore.js";
 // Would be nice if we could just extend the select element but apparently not all browsers support that
 class CategorySelector extends HTMLElement {
     connectedCallback() {
-        // Turn the list of strings into a list of { 'category': 'category' } objs
-        let categories = categoryStore.getCategories();
-        categories = categories.map(
-            (category) => ({ label: category, value: category })
-        );
-        categories.unshift({ label: 'Uncategorized', value: '' })
-        
         const select = document.createElement('select');
-        categories.forEach(({ label, value }) => {
+        this.options.forEach(({ label, value }) => {
             const option = document.createElement('option');
             option.value = value;
             option.textContent = label;
@@ -23,6 +16,16 @@ class CategorySelector extends HTMLElement {
 
     get value() {
         return this.querySelector('select').value;
+    }
+
+    get options() {
+        // Turn the list of strings into a list of { 'category': 'category' } objs
+        let categories = categoryStore.getCategories();
+        categories = categories.map(
+            (category) => ({ label: category, value: category })
+        );
+        categories.unshift({ label: 'Uncategorized', value: '' })
+        return categories;
     }
 }
 

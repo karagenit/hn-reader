@@ -1,4 +1,4 @@
-#content {
+x-story-list {
     border: none;
     margin-top: 0;
     padding: 0;
@@ -64,19 +64,19 @@ select:focus {
     max-width: 1.5rem; /* does this annoying pop in thing while the font is still loading, so it shows the text 'settings' which is longer then it shrinks when replaced by the symbol. this helps prevent that */
 }
 
-#content div {
+x-story-list div {
     margin-top: 0.5rem;
     border: 1px solid color(display-p3 .1255 .302 .2314);
     border-radius: 3px;
     background-color: color(display-p3 0.0863 0.1373 0.1333);
 }
 
-#content a {
+x-story-list a {
     color: inherit;
     text-decoration: none;
 }
 
-#content a:visited {
+x-story-list a:visited {
     color: inherit;
 }
 

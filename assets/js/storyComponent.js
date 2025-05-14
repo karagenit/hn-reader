@@ -1,5 +1,7 @@
 import StoryCategorySelector from "./storyCategorySelectorComponent.js";
+import StoryHideButton from "./storyHideButtonComponent.js";
 import categoryStore from "./categoryStore.js";
+import hiddenStore from "./hiddenStore.js";
 
 export default class StoryComponent extends HTMLElement {
     #storyData;
@@ -26,6 +28,10 @@ export default class StoryComponent extends HTMLElement {
         this.addEventListener('storyCategoryChange', (event) => {
             categoryStore.moveDomainToCategory(this.#storyData.domain, event.detail.category);
         }, false);
+
+        this.addEventListener('storyHide', () => {
+            hiddenStore.hideStory(this.storyData.id);
+        }, false);
     }
 
     render() {
@@ -34,7 +40,7 @@ export default class StoryComponent extends HTMLElement {
             const categorySelectorValue = categoryStore.getCategoryForDomain(this.storyData.domain);
             this.innerHTML = `
                 <div class="story" id="id-${this.storyData.id}">
-                    <span class="close-button" id="${this.storyData.id}">☒</span>
+                    <story-hide-button></story-hide-button>
                     <p>
                         <a class="story-link" href="${this.storyData.link}">
                             <span class="story-score">${this.storyData.score}</span>

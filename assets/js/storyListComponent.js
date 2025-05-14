@@ -15,6 +15,7 @@ export default class StoryListComponent extends HTMLElement {
         this.fetchData();
         document.getElementById('category').addEventListener('change', this.render.bind(this), false);
         this.addEventListener('storyCategoryChange', this.render.bind(this), false);
+        this.addEventListener('storyHide', this.render.bind(this), false);
     }
 
     async fetchData() {
@@ -40,9 +41,7 @@ export default class StoryListComponent extends HTMLElement {
         //         const [story] = filteredStories.splice(storyIndex, 1);
         //         filteredStories.unshift(story);
         //     }
-            
         // }
-
 
         const storiesToDisplay = filteredStories.slice(0, 10);
         storiesToDisplay.forEach(story => {
@@ -50,10 +49,10 @@ export default class StoryListComponent extends HTMLElement {
             this.append(storyElement); // would rather use a fragment and append all at once, but attaching listeners doesn't work until they're on the DOM
             storyElement.storyData = story;
         
-            storyElement.querySelector('.close-button').addEventListener('click', () => {
-                hiddenStore.hideStory(story.id);
-                this.render();
-            }, false);
+            // storyElement.querySelector('.close-button').addEventListener('click', () => {
+            //     hiddenStore.hideStory(story.id);
+            //     this.render();
+            // }, false);
 
             storyElement.querySelector(`a[href="${story.link}"]`).addEventListener('click', () => {
                 history.replaceState(null, '', '/#id-' + story.id);

@@ -45,5 +45,4 @@ export default class StoryComponent extends HTMLElement {
     }
 }
 
-// Do we need to export this as a function? Or can we just rip it?
 customElements.define('x-story', StoryComponent);

@@ -179,16 +179,14 @@ const displayStories = function() {
     filteredStories.slice(0, 10).forEach(story => appendStory(story));
 }
 
-const handleMainCategoryChange = function() {
-    const categorySelect = document.getElementById("category");
-    localStorage.setItem("lastCategory", categorySelect.value);
-    displayStories();
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     defineCategorySelector();
-    document.getElementById("category").addEventListener('change', handleMainCategoryChange, false);
-    document.getElementById("category").value = categoryStore.getLastCategory();
+    const mainCategorySelector = document.getElementById("category");
+    mainCategorySelector.addEventListener('change', displayStories, false);
+    mainCategorySelector.addEventListener('change', (event) => {
+        categoryStore.setLastCategory(event.target.value);
+    }, false);
+    mainCategorySelector.value = categoryStore.getLastCategory();
     
     loadValues()
 });

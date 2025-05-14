@@ -22,5 +22,9 @@ export default {
     },
     getLastCategory() {
         return lastCategory;
+    },
+    setLastCategory(value) {
+        lastCategory = value;
+        localStorage.setItem("lastCategory", value);
     }
 }

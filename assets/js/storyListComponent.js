@@ -13,8 +13,7 @@ export default class StoryListComponent extends HTMLElement {
 
     connectedCallback() {
         this.fetchData();
-        document.getElementById('category').addEventListener('change', this.render.bind(this), false);
-        this.addEventListener('storyListReload', this.render.bind(this), false);
+        window.addEventListener('storyListReload', this.render.bind(this), false);
     }
 
     async fetchData() {

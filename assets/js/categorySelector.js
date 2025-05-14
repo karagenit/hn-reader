@@ -2,8 +2,6 @@ import categoryStore from "./categoryStore.js";
 
 // Would be nice if we could just extend the select element but apparently not all browsers support that
 class CategorySelector extends HTMLElement {
-    static observedAttributes = ['value'];
-
     connectedCallback() {
         const select = document.createElement('select');
         this.options.forEach(({ label, value }) => {
@@ -32,12 +30,6 @@ class CategorySelector extends HTMLElement {
         );
         categories.unshift({ label: 'Uncategorized', value: '' })
         return categories;
-    }
-
-    attributeChangedCallback(name, _, value) {
-        if (name === 'value') {
-            this.querySelector('select').value = value;
-        }
     }
 }
 

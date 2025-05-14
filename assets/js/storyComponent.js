@@ -22,6 +22,7 @@ export default class StoryComponent extends HTMLElement {
         this.render();
         // TODO don't really like that we have this event handled both in story and storyList
         // Maybe domain should be stored in storyCategorySelector and it can update the store?
+        // Or storyList can use the ID to lookup that story's domain?
         this.addEventListener('storyCategoryChange', (event) => {
             categoryStore.moveDomainToCategory(this.#storyData.domain, event.detail.category);
         }, false);
@@ -45,7 +46,7 @@ export default class StoryComponent extends HTMLElement {
                     <hr>
                     <p class="domain">
                         <span>${this.storyData.domain}</span>
-                        <story-category-selector id="${this.storyData.id}"></category-selector>
+                        <story-category-selector></story-category-selector>
                     </p>
                 </div>
             `;

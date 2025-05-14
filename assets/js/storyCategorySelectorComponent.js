@@ -7,7 +7,6 @@ export default class StoryCategorySelector extends CategorySelector {
             this.dispatchEvent(
                 new CustomEvent('storyCategoryChange', {
                     detail: {
-                        id: this.id,
                         category: this.value
                     },
                     bubbles: true

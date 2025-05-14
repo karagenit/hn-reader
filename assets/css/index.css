@@ -1,20 +1,12 @@
-
-
-
-
 #content {
     border: none;
     margin-top: 0;
     padding: 0;
 }
 
-
-
 .links {
     float: right;
 }
-
-
 
 /* updated styles */
 
@@ -35,12 +27,22 @@ body {
 
 .toolbar > * {
     padding: 0.4rem 0.5rem;
+    display: flex;
+}
+
+.toolbar category-selector {
+    flex-grow: 1;
+    border: none;
+    margin-right: 0.5rem; /* to make the right dropdown arrow move in */
+    color: inherit;
+    background-color: inherit;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 .toolbar select {
     flex-grow: 1;
     border: none;
-    margin-right: 0.5rem; /* to make the right dropdown arrow move in */
     color: inherit;
     background-color: inherit;
     font-family: inherit;

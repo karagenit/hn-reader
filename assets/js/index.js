@@ -1,3 +1,5 @@
+import { defineCategorySelector } from "./categorySelector.js";
+
 let stories = [];
 let categories = {
     "Technology": [],
@@ -183,15 +185,17 @@ const handleMainCategoryChange = function() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    appendSelectOptions(document.getElementById("category"));
+    defineCategorySelector();
+
+    // appendSelectOptions(document.getElementById("category"));
     document.getElementById("category").addEventListener('change', handleMainCategoryChange, false);
 
-    const lastCategory = localStorage.getItem('lastCategory');
-    const categorySelect = document.getElementById("category");
-    // TODO could just use Object.keys(categories) instead of categorySelect.options...
-    if (lastCategory && Array.from(categorySelect.options).some(option => option.value === lastCategory)) {
-        categorySelect.value = lastCategory;
-    }
+    // const lastCategory = localStorage.getItem('lastCategory');
+    // const categorySelect = document.getElementById("category");
+    // // TODO could just use Object.keys(categories) instead of categorySelect.options...
+    // if (lastCategory && Array.from(categorySelect.options).some(option => option.value === lastCategory)) {
+    //     categorySelect.value = lastCategory;
+    // }
     
     loadValues()
 });

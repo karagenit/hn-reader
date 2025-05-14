@@ -6,11 +6,6 @@ try {
 const getTodayDayNumber = () => Math.floor(Date.now() / (1000 * 60 * 60 * 24));
 
 export default {
-    getHiddenStories() {
-        return Object.keys(hiddenStories).map(date => {
-            return hiddenStories[date];
-        }).flat();
-    },
     addHiddenStory(id) {
         let today = getTodayDayNumber()
         if (!hiddenStories[today]) {

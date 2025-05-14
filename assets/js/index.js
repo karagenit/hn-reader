@@ -1,4 +1,5 @@
 import { defineCategorySelector } from "./categorySelector.js";
+import { defineStoryComponent } from "./storyComponent.js";
 import categoryStore from "./categoryStore.js";
 import hiddenStore from "./hiddenStore.js";
 
@@ -50,29 +51,14 @@ const handleClickStory = function(id, comments_url) {
 
 const appendStory = function(story) {
     const storyHtml = `
-        <div class="story" id="id-${story.id}">
-            <span class="close-button" id="${story.id}">☒</span>
-            <p>
-                <a class="story-link" href="${story.link}">
-                    <span class="story-score">${story.score}</span>
-                    ${story.title}
-                </a>
-                <a class="story-comments" href="${story.comments}">
-                    ${story.descendants} comments
-                </a>
-            </p>
-            <hr>
-            <p class="domain">
-                <span>${story.domain}</span>
-                <category-selector id="${story.id}"></category-selector>
-            </p>
-        </div>
+        <x-story></x-story>
     `;
 
     const container = document.getElementById("content");
     container.insertAdjacentHTML('beforeend', storyHtml);
 
     const storyElement = container.lastElementChild;
+    storyElement.storyData = story;
     const closeButton = storyElement.querySelector('.close-button');
     const linkElement = storyElement.querySelector(`a[href="${story.link}"]`);
     const commentsElement = storyElement.querySelector(`a[href="${story.comments}"]`);
@@ -116,6 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
         categoryStore.lastCategory = event.target.value;
     }, false);
     mainCategorySelector.value = categoryStore.lastCategory;
+
+    defineStoryComponent();
     
     loadValues()
 });

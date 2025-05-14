@@ -1,5 +1,6 @@
 import categoryStore from "./categoryStore.js";
 
+// TODO two child classes of main- and story- selectors?
 // Would be nice if we could just extend the select element but apparently not all browsers support that
 class CategorySelector extends HTMLElement {
     connectedCallback() {

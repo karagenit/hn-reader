@@ -1,45 +1,8 @@
 import { defineCategorySelector } from "./categorySelector.js";
 import categoryStore from "./categoryStore.js";
+import hiddenStore from "./hiddenStore.js";
 
 let stories = [];
-
-// Map of Date -> Array of story IDs
-let hiddenStories = {};
-
-let storedHiddenStories = localStorage.getItem("hiddenStories");
-
-if (storedHiddenStories) {
-    hiddenStories = JSON.parse(storedHiddenStories);
-}
-
-const getHiddenStories = function() {
-    return Object.keys(hiddenStories).map(date => {
-        return hiddenStories[date];
-    }).flat();
-}
-
-const addHiddenStory = function(id) {
-    let today = getTodayDayNumber()
-    if (!hiddenStories[today]) {
-        hiddenStories[today] = []
-    }
-    hiddenStories[today].push(parseInt(id));
-}
-
-const saveHiddenStories = function() {
-    // Only save the last 7 days worth of hidden stories so we don't blow up our local storage over time
-    let today = getTodayDayNumber()
-    Object.keys(hiddenStories).forEach(date => {
-        if (date < today - 7) {
-            delete hiddenStories[date];
-        }
-    });
-    localStorage.setItem('hiddenStories', JSON.stringify(hiddenStories))
-}
-
-const getTodayDayNumber = function() {
-    return Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-}
 
 const loadValues = async function() {
     let res = await fetch('/stories')
@@ -60,9 +23,9 @@ const handleCategorizeStory = function(sel) {
 
 const handleHideStory = function(button) {
     let id = button.id
-    addHiddenStory(id)
+    hiddenStore.addHiddenStory(id)
     displayStories()
-    saveHiddenStories()
+    hiddenStore.saveHiddenStories()
 }
 
 const appendSelectOptions = function(element) {
@@ -126,7 +89,7 @@ const appendStory = function(story) {
 }
 
 const displayStories = function() {
-    let hiddenIds = getHiddenStories()
+    let hiddenIds = hiddenStore.getHiddenStories()
     document.getElementById("content").innerHTML = ''
     let currentCategory = document.getElementById("category").value
 

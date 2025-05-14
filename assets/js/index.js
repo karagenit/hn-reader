@@ -184,9 +184,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainCategorySelector = document.getElementById("category");
     mainCategorySelector.addEventListener('change', displayStories, false);
     mainCategorySelector.addEventListener('change', (event) => {
-        categoryStore.setLastCategory(event.target.value);
+        categoryStore.lastCategory = event.target.value;
     }, false);
-    mainCategorySelector.value = categoryStore.getLastCategory();
+    mainCategorySelector.value = categoryStore.lastCategory;
     
     loadValues()
 });

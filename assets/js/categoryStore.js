@@ -1,4 +1,4 @@
-let categories = {
+let categoriesData = {
     "Technology": [],
     "Interesting": [],
     "Business": [],
@@ -10,20 +10,20 @@ let categories = {
 let storedCategories = localStorage.getItem("categories");
 
 if (storedCategories) {
-    categories = JSON.parse(storedCategories)
+    categoriesData = JSON.parse(storedCategories)
 }
 
 let lastCategory = localStorage.getItem('lastCategory') ?? '';
 // TODO validate that lastCategory is one of the real keys in categories?
 
 export default {
-    getCategories() {
-        return Object.keys(categories);
+    get categories() {
+        return Object.keys(categoriesData);
     },
-    getLastCategory() {
+    get lastCategory() {
         return lastCategory;
     },
-    setLastCategory(value) {
+    set lastCategory(value) {
         lastCategory = value;
         localStorage.setItem("lastCategory", value);
     }

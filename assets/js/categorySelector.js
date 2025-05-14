@@ -24,7 +24,7 @@ class CategorySelector extends HTMLElement {
 
     get options() {
         // Turn the list of strings into a list of { 'category': 'category' } objs
-        let categories = categoryStore.getCategories();
+        let categories = categoryStore.categories;
         categories = categories.map(
             (category) => ({ label: category, value: category })
         );

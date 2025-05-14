@@ -93,10 +93,6 @@ const appendSelectOptions = function(element) {
     });
 }
 
-const getDomainCategory = function(domain) {
-    return categoryStore.getCategoryForDomain(domain);
-}
-
 const handleClickStory = function(id, comments_url) {
     history.replaceState(null, '', '/#id-' + id)
     // TODO not allowed, need to create my own /redirect?comments=url endpoint to handle this ugh
@@ -140,7 +136,7 @@ const appendStory = function(story) {
 
     appendSelectOptions(selectElement);
     selectElement.addEventListener('change', () => handleCategorizeStory(selectElement), false);
-    selectElement.value = getDomainCategory(story.domain);
+    selectElement.value = categoryStore.getCategoryForDomain(story.domain);
 }
 
 const displayStories = function() {
@@ -149,7 +145,7 @@ const displayStories = function() {
     let currentCategory = document.getElementById("category").value
 
     let filteredStories = stories.filter(story => {
-        return currentCategory === getDomainCategory(story['domain'])
+        return currentCategory === categoryStore.getCategoryForDomain(story['domain'])
     }).filter(story => {
         return !hiddenIds.includes(story['id'])
     });

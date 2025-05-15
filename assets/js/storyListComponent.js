@@ -48,6 +48,7 @@ export default class StoryListComponent extends HTMLElement {
 
         if (this.#lastAction?.name) {
             const undoElement = document.createElement('undo-component');
+            undoElement.lastAction = this.#lastAction;
             this.append(undoElement);
         }
 

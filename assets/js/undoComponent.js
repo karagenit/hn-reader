@@ -1,15 +1,10 @@
 export default class UndoComponent extends HTMLElement {
-    connectedCallback() {
-        this.innerHTML = `
-            <div>Undo</div>
-        `;
-        
-        // hideButton.addEventListener('click', () => {
-        //     this.dispatchEvent(new CustomEvent('storyHide', {
-        //         detail: {},
-        //         bubbles: true
-        //     }));
-        // });
+    set lastAction(lastAction) {
+        if (lastAction?.name === 'hide') {
+            this.innerHTML = `<div>undo hide</div>`;
+        } else if (lastAction?.name === 'categorize') {
+            this.innerHTML = `<div>undo categorize</div>`;
+        }
     }
 }
 

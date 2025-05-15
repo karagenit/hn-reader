@@ -1,6 +1,7 @@
 import categoryStore from "./categoryStore.js";
 import hiddenStore from "./hiddenStore.js";
 import StoryComponent from "./storyComponent.js";
+import UndoComponent from "./undoComponent.js";
 
 export default class StoryListComponent extends HTMLElement {
     #storyListData;
@@ -43,6 +44,11 @@ export default class StoryListComponent extends HTMLElement {
                 const [story] = filteredStories.splice(storyIndex, 1);
                 filteredStories.unshift(story);
             }
+        }
+
+        if (this.#lastAction?.name) {
+            const undoElement = document.createElement('undo-component');
+            this.append(undoElement);
         }
 
         const storiesToDisplay = filteredStories.slice(0, 10);

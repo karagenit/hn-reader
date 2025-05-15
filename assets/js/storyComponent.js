@@ -28,6 +28,7 @@ export default class StoryComponent extends HTMLElement {
             this.emitReloadList({
                 triggeringAction: {
                     name: 'categorize',
+                    storyId: this.storyData.id,
                     domain: this.storyData.domain,
                     oldCategory
                 }

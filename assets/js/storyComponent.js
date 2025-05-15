@@ -22,22 +22,32 @@ export default class StoryComponent extends HTMLElement {
 
     connectedCallback() {
         this.render();
-        // TODO don't really like that we have this event handled both in story and storyList
-        // Maybe domain should be stored in storyCategorySelector and it can update the store?
-        // Or storyList can use the ID to lookup that story's domain?
         this.addEventListener('storyCategoryChange', (event) => {
-            categoryStore.moveDomainToCategory(this.#storyData.domain, event.detail.category);
-            this.emitReloadList();
+            const oldCategory = categoryStore.getCategoryForDomain(this.storyData.domain);
+            categoryStore.moveDomainToCategory(this.storyData.domain, event.detail.category);
+            this.emitReloadList({
+                triggeringAction: {
+                    name: 'categorize',
+                    domain: this.storyData.domain,
+                    oldCategory
+                }
+            });
         }, false);
 
         this.addEventListener('storyHide', () => {
             hiddenStore.hideStory(this.storyData.id);
-            this.emitReloadList();
+            this.emitReloadList({
+                triggeringAction: {
+                    name: 'hide',
+                    storyId: this.storyData.id
+                }
+            });
         }, false);
     }
 
-    emitReloadList() {
+    emitReloadList(detail) {
         this.dispatchEvent(new CustomEvent('storyListReload', {
+            detail,
             bubbles: true
         }));
     }

@@ -5,6 +5,7 @@ import StoryComponent from "./storyComponent.js";
 export default class StoryListComponent extends HTMLElement {
     #storyListData;
     #apiPromise;
+    #lastAction = {};
 
     constructor() {
         super();
@@ -13,7 +14,10 @@ export default class StoryListComponent extends HTMLElement {
 
     connectedCallback() {
         this.fetchData();
-        window.addEventListener('storyListReload', this.render.bind(this), false);
+        window.addEventListener('storyListReload', (event) => {
+            this.#lastAction = event?.detail?.triggeringAction ?? this.#lastAction;
+            this.render();
+        }, false);
     }
 
     async fetchData() {

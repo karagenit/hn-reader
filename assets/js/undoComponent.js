@@ -13,13 +13,19 @@ export default class UndoComponent extends HTMLElement {
         this.querySelector('div')?.addEventListener('click', () => {
             console.log(this.#lastAction);
             if (lastAction?.name === 'hide') {
-                // unhide
                 hiddenStore.unhideStory(lastAction.storyId);
-                // trigger reload list w/ {} previous action
+                this.emitReloadList();
             } else if (lastAction?.name === 'categorize') {
 
             }
         })
+    }
+
+    emitReloadList() {
+        this.dispatchEvent(new CustomEvent('storyListReload', {
+            detail: { triggeringAction: {} },
+            bubbles: true
+        }));
     }
 }
 

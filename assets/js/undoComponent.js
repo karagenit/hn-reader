@@ -1,3 +1,5 @@
+import hiddenStore from "./hiddenStore.js";
+
 export default class UndoComponent extends HTMLElement {
     #lastAction = {}
     set lastAction(lastAction) {
@@ -10,6 +12,13 @@ export default class UndoComponent extends HTMLElement {
         }
         this.querySelector('div')?.addEventListener('click', () => {
             console.log(this.#lastAction);
+            if (lastAction?.name === 'hide') {
+                // unhide
+                hiddenStore.unhideStory(lastAction.storyId);
+                // trigger reload list w/ {} previous action
+            } else if (lastAction?.name === 'categorize') {
+
+            }
         })
     }
 }

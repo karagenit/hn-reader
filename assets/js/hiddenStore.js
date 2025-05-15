@@ -28,5 +28,11 @@ export default {
             .map(date => hiddenStories[date])
             .flat()
             .includes(id);
+    },
+    unhideStory(id) {
+        Object.keys(hiddenStories).forEach(date => {
+            hiddenStories[date] = hiddenStories[date].filter(storyId => storyId !== parseInt(id));
+        });
+        localStorage.setItem('hiddenStories', JSON.stringify(hiddenStories));
     }
 };

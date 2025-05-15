@@ -30,7 +30,8 @@ export default class StoryComponent extends HTMLElement {
                     name: 'categorize',
                     storyId: this.storyData.id,
                     domain: this.storyData.domain,
-                    oldCategory
+                    oldCategory,
+                    newCategory: event.detail.category
                 }
             });
         }, false);

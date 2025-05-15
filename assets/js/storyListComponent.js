@@ -32,14 +32,14 @@ export default class StoryListComponent extends HTMLElement {
             return currentCategory === categoryStore.getCategoryForDomain(story['domain'])
         }).filter(story => !hiddenStore.isStoryHidden(story['id']));
     
-        // if (window.location.hash.startsWith('#id-')) {
-        //     const storyId = parseInt(window.location.hash.slice(4));
-        //     const storyIndex = filteredStories.findIndex(story => story.id === storyId);
-        //     if (storyIndex !== -1) {
-        //         const [story] = filteredStories.splice(storyIndex, 1);
-        //         filteredStories.unshift(story);
-        //     }
-        // }
+        if (window.location.hash.startsWith('#id-')) {
+            const storyId = parseInt(window.location.hash.slice(4));
+            const storyIndex = filteredStories.findIndex(story => story.id === storyId);
+            if (storyIndex !== -1) {
+                const [story] = filteredStories.splice(storyIndex, 1);
+                filteredStories.unshift(story);
+            }
+        }
 
         const storiesToDisplay = filteredStories.slice(0, 10);
         storiesToDisplay.forEach(story => {

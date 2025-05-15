@@ -2,9 +2,7 @@ import hiddenStore from "./hiddenStore.js";
 import categoryStore from "./categoryStore.js";
 
 export default class UndoComponent extends HTMLElement {
-    #lastAction = {}
     set lastAction(lastAction) {
-        this.#lastAction = lastAction;
         const newCategoryName = !!lastAction.newCategory ? lastAction.newCategory : 'Uncategorized';
         if (lastAction?.name === 'hide') {
             this.innerHTML = `<div class="story"><p>Story Hidden (click to undo)</p></div>`;
@@ -14,19 +12,13 @@ export default class UndoComponent extends HTMLElement {
         this.querySelector('div')?.addEventListener('click', () => {
             if (lastAction?.name === 'hide') {
                 hiddenStore.unhideStory(lastAction.storyId);
-                this.emitReloadList();
             } else if (lastAction?.name === 'categorize') {
                 categoryStore.moveDomainToCategory(lastAction.domain, lastAction.oldCategory);
-                this.emitReloadList();
             }
+            this.dispatchEvent(new CustomEvent('storyListReload', {
+                bubbles: true
+            }));
         })
-    }
-
-    emitReloadList() {
-        this.dispatchEvent(new CustomEvent('storyListReload', {
-            // detail: { triggeringAction: {} },
-            bubbles: true
-        }));
     }
 }
 

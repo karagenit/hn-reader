@@ -32,10 +32,14 @@ export default class StoryListComponent extends HTMLElement {
 
         let currentCategory = document.getElementById("category").value
     
-        // TODO also filter by having a valid ID and title
+        // Only show stories in this category and not hidden, unless that one was just acted on so we can show it's undo
         let filteredStories = this.#storyListData.filter(story => {
-            return currentCategory === categoryStore.getCategoryForDomain(story['domain'])
-        }).filter(story => !hiddenStore.isStoryHidden(story['id']));
+            const hasId = !!story.id;
+            const wasLastActedOn = this.#lastAction?.storyId == story.id;
+            const isInCurrentCategory = currentCategory === categoryStore.getCategoryForDomain(story['domain']);
+            const isNotHidden = !hiddenStore.isStoryHidden(story['id'])
+            return hasId && (wasLastActedOn || (isInCurrentCategory && isNotHidden));
+        })
     
         if (window.location.hash.startsWith('#id-')) {
             const storyId = parseInt(window.location.hash.slice(4));
@@ -46,28 +50,29 @@ export default class StoryListComponent extends HTMLElement {
             }
         }
 
-        if (this.#lastAction?.name) {
-            const undoElement = document.createElement('undo-component');
-            undoElement.lastAction = this.#lastAction;
-            this.append(undoElement);
-        }
-
         const storiesToDisplay = filteredStories.slice(0, 10);
         storiesToDisplay.forEach(story => {
-            const storyElement = document.createElement('x-story');
-            this.append(storyElement); // would rather use a fragment and append all at once, but attaching listeners doesn't work until they're on the DOM
-            storyElement.storyData = story;
+            if (story.id == this.#lastAction?.storyId) {
+                // In this case, we don't want to render the actual story, we want to show it's undo button
+                const undoElement = document.createElement('undo-component');
+                undoElement.lastAction = this.#lastAction;
+                this.append(undoElement);
+            } else {
+                const storyElement = document.createElement('x-story');
+                this.append(storyElement); // would rather use a fragment and append all at once, but attaching listeners doesn't work until they're on the DOM
+                storyElement.storyData = story;
 
-            // TODO migrate these to their own 'story-link' web components
-            storyElement.querySelector(`a[href="${story.link}"]`).addEventListener('click', () => {
-                history.replaceState(null, '', '/#id-' + story.id);
-                return true;
-            }, false);
+                // TODO migrate these to their own 'story-link' web components
+                storyElement.querySelector(`a[href="${story.link}"]`).addEventListener('click', () => {
+                    history.replaceState(null, '', '/#id-' + story.id);
+                    return true;
+                }, false);
 
-            storyElement.querySelector(`a[href="${story.comments}"]`).addEventListener('click', () => {
-                history.replaceState(null, '', '/#id-' + story.id);
-                return true;
-            }, false);
+                storyElement.querySelector(`a[href="${story.comments}"]`).addEventListener('click', () => {
+                    history.replaceState(null, '', '/#id-' + story.id);
+                    return true;
+                }, false);
+            }
         });
     }
 }

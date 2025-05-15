@@ -16,7 +16,7 @@ export default class StoryListComponent extends HTMLElement {
     connectedCallback() {
         this.fetchData();
         window.addEventListener('storyListReload', (event) => {
-            this.#lastAction = event?.detail?.triggeringAction ?? this.#lastAction;
+            this.#lastAction = event?.detail?.triggeringAction; // ?? this.#lastAction;
             this.render();
         }, false);
     }

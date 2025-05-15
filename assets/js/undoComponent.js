@@ -23,7 +23,7 @@ export default class UndoComponent extends HTMLElement {
 
     emitReloadList() {
         this.dispatchEvent(new CustomEvent('storyListReload', {
-            detail: { triggeringAction: {} },
+            // detail: { triggeringAction: {} },
             bubbles: true
         }));
     }

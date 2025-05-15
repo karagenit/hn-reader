@@ -45,6 +45,10 @@ export default class StoryComponent extends HTMLElement {
                 }
             });
         }, false);
+
+        this.addEventListener('storyLinkClick', () => {
+            history.replaceState(null, '', '/#id-' + story.id);
+        });
     }
 
     emitReloadList(detail) {

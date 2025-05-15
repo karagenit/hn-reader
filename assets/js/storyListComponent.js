@@ -63,15 +63,15 @@ export default class StoryListComponent extends HTMLElement {
                 storyElement.storyData = story;
 
                 // TODO migrate these to their own 'story-link' web components
-                storyElement.querySelector(`a[href="${story.link}"]`).addEventListener('click', () => {
-                    history.replaceState(null, '', '/#id-' + story.id);
-                    return true;
-                }, false);
+                // storyElement.querySelector(`a[href="${story.link}"]`).addEventListener('click', () => {
+                //     history.replaceState(null, '', '/#id-' + story.id);
+                //     return true;
+                // }, false);
 
-                storyElement.querySelector(`a[href="${story.comments}"]`).addEventListener('click', () => {
-                    history.replaceState(null, '', '/#id-' + story.id);
-                    return true;
-                }, false);
+                // storyElement.querySelector(`a[href="${story.comments}"]`).addEventListener('click', () => {
+                //     history.replaceState(null, '', '/#id-' + story.id);
+                //     return true;
+                // }, false);
             }
         });
     }

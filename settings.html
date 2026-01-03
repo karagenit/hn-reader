@@ -37,8 +37,11 @@
     </div>
 
     <div id="importexport">
+        <hr>
         <button onclick="downloadJson()">Download Site Data (JSON)</button>
+        <p id="lastExported">Last exported: loading...</p>
 
+        <hr>
         <textarea id="import" placeholder="Add JSON here to import"></textarea>
         <br>
 
@@ -63,6 +66,15 @@
             link.download = `hn-reader-data-${today}.json`;
             link.click();
             URL.revokeObjectURL(url);
+
+            localStorage.setItem('lastExported', today);
+            updateLastExportedDisplay();
+        }
+
+        updateLastExportedDisplay = function() {
+            const lastExported = localStorage.getItem('lastExported');
+            const text = lastExported ? `Last exported: ${lastExported}` : 'Last exported: never';
+            document.getElementById('lastExported').textContent = text;
         }
 
         importJson = function() {
@@ -130,6 +142,7 @@
         }
 
         displayCategories()
+        updateLastExportedDisplay()
     </script>
   </body>
 </html>

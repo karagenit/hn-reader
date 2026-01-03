@@ -11,16 +11,6 @@
             max-width: 100%;
         }
 
-        details {
-            margin-top: 1rem;
-        }
-
-        details pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: #ddd;
-        }
-
         textarea {
             margin-top: 1rem;
             width: 24em;
@@ -47,10 +37,7 @@
     </div>
 
     <div id="importexport">
-        <details>
-            <summary>Click to view full JSON for export</summary>
-            <pre><code id="export">{"export loading...": []}</code></pre>
-        </details>
+        <button onclick="downloadJson()">Download Site Data (JSON)</button>
 
         <textarea id="import" placeholder="Add JSON here to import"></textarea>
         <br>
@@ -64,6 +51,18 @@
 
         if (storedCategories) {
             categories = JSON.parse(storedCategories)
+        }
+
+        downloadJson = function() {
+            const dataStr = JSON.stringify(categories, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            const today = new Date().toISOString().split('T')[0];
+            link.href = url;
+            link.download = `hn-reader-data-${today}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
         }
 
         importJson = function() {
@@ -131,9 +130,6 @@
         }
 
         displayCategories()
-
-        document.getElementById('export').innerHTML = JSON.stringify(categories)
-        console.log(JSON.stringify(categories))
     </script>
   </body>
 </html>

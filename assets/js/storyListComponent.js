@@ -28,10 +28,16 @@ export default class StoryListComponent extends HTMLElement {
     }
 
     render() {
+        if (!this.#storyListData) {
+            // TODO make this a lil nicer...
+            this.innerHTML = '<p>&nbsp;&nbsp;&nbsp;Loading stories...</p>';
+            return;
+        }
+
         this.innerHTML = ''
 
         let currentCategory = document.getElementById("category").value
-    
+
         // Only show stories in this category and not hidden, unless that one was just acted on so we can show it's undo
         let filteredStories = this.#storyListData.filter(story => {
             const hasId = !!story.id;

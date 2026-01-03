@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"sync"
 	"errors"
+	"os/exec"
 )
 
 type story struct {
@@ -31,6 +32,21 @@ var stories []story
 var last_update int64 // TODO need to be atomic?
 
 var global_mutex sync.Mutex
+
+var appVersion string
+
+func init() {
+	// Try to get git commit hash for cache busting
+	cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
+	output, err := cmd.Output()
+	if err == nil {
+		appVersion = strings.TrimSpace(string(output))
+	} else {
+		// Fallback to timestamp if git not available
+		appVersion = fmt.Sprintf("%d", time.Now().Unix())
+	}
+	fmt.Println("App version:", appVersion)
+}
 
 // Get an array of the top 500 stories as JSON, cached for performance
 func getTopStories(c *gin.Context) {
@@ -151,9 +167,22 @@ func getStoryDetails(id int) (story, error) {
 func main() {
 	go updateTopStories()
 	router := gin.Default()
-	router.StaticFile("/", "./index.html") // just .Static tries to wildcard the whole route...
-	router.StaticFile("/settings", "./settings.html")
+
+	// Load HTML templates
+	router.LoadHTMLGlob("*.html")
+
+	// Serve static assets
 	router.Static("/assets", "./assets")
+
+	// Serve HTML with version for cache busting
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"Version": appVersion,
+		})
+	})
+
+	router.StaticFile("/settings", "./settings.html")
+
 	router.GET("/stories", getTopStories)
 	router.Run("localhost:8080")
 }

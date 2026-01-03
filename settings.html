@@ -11,13 +11,11 @@
             max-width: 100%;
         }
 
-        textarea {
+        #importexport button {
             margin-top: 1rem;
-            width: 24em;
-            max-width: 100%;
         }
 
-        #importexport button {
+        #importexport input[type="file"] {
             margin-top: 1rem;
         }
     </style>
@@ -42,7 +40,7 @@
         <p id="lastExported">Last exported: loading...</p>
 
         <hr>
-        <textarea id="import" placeholder="Add JSON here to import"></textarea>
+        <input type="file" id="import" accept=".json">
         <br>
 
         <button onclick="importJson()">Import</button>
@@ -78,13 +76,29 @@
         }
 
         importJson = function() {
-            imported = JSON.parse(document.getElementById('import').value)
-            // Prevent accidentally blowing up your json with a misclick
-            if (imported && Object.keys(imported).length > 0) {
-                categories = imported
-                localStorage.setItem('categories', JSON.stringify(categories))
-                displayCategories()
+            const fileInput = document.getElementById('import');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file first');
+                return;
             }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    // Prevent accidentally blowing up your json with a misclick
+                    if (imported && Object.keys(imported).length > 0) {
+                        categories = imported;
+                        localStorage.setItem('categories', JSON.stringify(categories));
+                        displayCategories();
+                    }
+                } catch (error) {
+                    alert('Error parsing JSON file: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
         }
 
         saveCategories = function() {

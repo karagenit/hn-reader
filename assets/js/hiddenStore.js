@@ -1,6 +1,6 @@
 let hiddenStories = {};
 try {
-    hiddenStories = JSON.parse(localStorage.getItem('hiddenStories'));
+    hiddenStories = JSON.parse(localStorage.getItem('hiddenStories')) || {};
 } catch (e) {}
 
 export default {

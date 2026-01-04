@@ -11,6 +11,18 @@
             alert('Error: ' + msg + '\nAt: ' + url + ':' + line + ':' + col);
             return false;
         };
+
+        window.addEventListener('unhandledrejection', function(event) {
+            alert('Promise rejection: ' + event.reason);
+        });
+
+        // Check if modules are supported
+        if (!('noModule' in HTMLScriptElement.prototype)) {
+            alert('ES modules not supported on this browser');
+        }
+
+        // Log that this script ran
+        alert('Debug script loaded');
     </script>
     <link rel="stylesheet" href="/assets/css/index.css?v={{.Version}}">
     <script type="module" src="/assets/js/index.js?v={{.Version}}"></script>

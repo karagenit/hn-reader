@@ -1,7 +1,7 @@
 import categoryStore from "./categoryStore.js";
 import hiddenStore from "./hiddenStore2.js";
-import StoryComponent from "./storyComponent.js";
-import UndoComponent from "./undoComponent.js";
+import StoryComponent from "./storyComponent2.js";
+import UndoComponent from "./undoComponent2.js";
 
 export default class StoryListComponent extends HTMLElement {
     #storyListData;

@@ -20,17 +20,6 @@
         if (!('noModule' in HTMLScriptElement.prototype)) {
             alert('ES modules not supported on this browser');
         }
-
-        // Log that this script ran
-        alert('Debug script loaded');
-
-        // Check if template rendering worked
-        setTimeout(function() {
-            var script = document.querySelector('script[src*="index.js"]');
-            if (script) {
-                alert('JS URL: ' + script.src);
-            }
-        }, 100);
     </script>
     <link rel="stylesheet" href="/assets/css/index.css?v={{.Version}}">
     <script type="module" src="/assets/js/index.js?v={{.Version}}"></script>

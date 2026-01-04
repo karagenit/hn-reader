@@ -1,4 +1,4 @@
-import hiddenStore from "./hiddenStore.js";
+import hiddenStore from "./hiddenStore2.js";
 import categoryStore from "./categoryStore.js";
 
 export default class UndoComponent extends HTMLElement {

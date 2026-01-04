@@ -1,5 +1,5 @@
 import categoryStore from "./categoryStore.js";
-import hiddenStore from "./hiddenStore.js";
+import hiddenStore from "./hiddenStore2.js";
 import StoryComponent from "./storyComponent.js";
 import UndoComponent from "./undoComponent.js";
 

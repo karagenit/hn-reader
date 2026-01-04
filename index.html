@@ -6,6 +6,12 @@
     <title>Caleb's HN Reader</title>
     <!-- This prevents the browser from requesting favicon.ico -->
     <link rel="icon" href="data:,">
+    <script>
+        window.onerror = function(msg, url, line, col, error) {
+            alert('Error: ' + msg + '\nAt: ' + url + ':' + line + ':' + col);
+            return false;
+        };
+    </script>
     <link rel="stylesheet" href="/assets/css/index.css?v={{.Version}}">
     <script type="module" src="/assets/js/index.js?v={{.Version}}"></script>
     <!-- this was tricky, you can't have multiple of these imports, LLM said to do settings,help but it has to be alphabetical! -->

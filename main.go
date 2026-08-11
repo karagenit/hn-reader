@@ -119,9 +119,9 @@ func updateTopStoryDetails() {
 func getStoryDetails(id int) (story, error) {
 	var result map[string]interface{}
 
-	req_url := []string{"https://hacker-news.firebaseio.com/v0/item/", strconv.Itoa(id), ".json"}
+	req_url := "https://hacker-news.firebaseio.com/v0/item/" + strconv.Itoa(id) + ".json"
 
-	if err := fetchJSON(strings.Join(req_url, ""), &result); err != nil {
+	if err := fetchJSON(req_url, &result); err != nil {
 		return story{}, err
 	}
 
@@ -141,14 +141,13 @@ func getStoryDetails(id int) (story, error) {
 			return story{}, errors.New("Error during Parse")
 		}
 
-		hn_url := []string{"https://news.ycombinator.com/item?id=", strconv.Itoa(id)}
+		hn_url := "https://news.ycombinator.com/item?id=" + strconv.Itoa(id)
 
 		return story{
-			ID: id, Title: title, Domain: story_url.Hostname(), Link: link, Comments: strings.Join(hn_url, ""), Descendants: int(descendants), Score: int(score),
+			ID: id, Title: title, Domain: story_url.Hostname(), Link: link, Comments: hn_url, Descendants: int(descendants), Score: int(score),
 		}, nil
 	} else {
-		err_strs := []string{"Error during Type Casting:", strconv.FormatBool(title_ok), strconv.FormatBool(link_ok), strconv.FormatBool(desc_ok), strconv.FormatBool(score_ok)}
-		return story{}, errors.New(strings.Join(err_strs, " "))
+		return story{}, fmt.Errorf("type cast failed: title=%v link=%v descendants=%v score=%v", title_ok, link_ok, desc_ok, score_ok)
 	}
 }
 

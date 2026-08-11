@@ -81,25 +81,26 @@ func isStoryReloadNeeded() bool {
 	return last_update+(15*60) < time.Now().Unix()
 }
 
-// Wipe and set the `ids` global from the HN API
-func updateTopStoryIds() {
-	resp, err := hnClient.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
+// fetchJSON GETs url and unmarshals the response body into target.
+func fetchJSON(url string, target interface{}) error {
+	resp, err := hnClient.Get(url)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
-	err = json.Unmarshal(body, &ids)
-	if err != nil {
+	return json.Unmarshal(body, target)
+}
+
+// Wipe and set the `ids` global from the HN API
+func updateTopStoryIds() {
+	if err := fetchJSON("https://hacker-news.firebaseio.com/v0/topstories.json", &ids); err != nil {
 		fmt.Println(err)
-		return
 	}
 }
 
@@ -120,20 +121,8 @@ func getStoryDetails(id int) (story, error) {
 
 	req_url := []string{"https://hacker-news.firebaseio.com/v0/item/", strconv.Itoa(id), ".json"}
 
-	resp, err := hnClient.Get(strings.Join(req_url, ""))
-	if err != nil {
-		return story{}, errors.New("Error during Get")
-	}
-
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return story{}, errors.New("Error during ReadAll")
-	}
-
-	err = json.Unmarshal(body, &result)
-	if err != nil {
-		return story{}, errors.New("Error during Unmarshal")
+	if err := fetchJSON(strings.Join(req_url, ""), &result); err != nil {
+		return story{}, err
 	}
 
 	title, title_ok := result["title"].(string)

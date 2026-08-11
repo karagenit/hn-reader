@@ -106,20 +106,12 @@ func updateTopStoryIds() {
 // Using the `ids` global, fetch each story and put it in the `stories` global (wipes existing stories)
 func updateTopStoryDetails() {
 	new_stories := make([]story, len(ids))
-	//var new_stories []story
-	// new_stories := []story{}
 	for i, id := range ids {
-		new_story, err := getStoryDetails(id)
-		if err == nil {
+		if new_story, err := getStoryDetails(id); err == nil {
 			new_stories[i] = new_story
-			// new_stories = append(new_stories, new_story)
-			//} else {
-			//fmt.Println(err)
 		}
 	}
-	stories = make([]story, len(new_stories))
-	// copy(new_stories, stories)
-	copy(stories, new_stories)
+	stories = new_stories
 }
 
 // Fetches a HN story by its ID from the API and returns a `story` struct

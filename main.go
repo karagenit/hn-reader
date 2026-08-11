@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io"
@@ -135,20 +134,20 @@ func getStoryDetails(id int) (story, error) {
 	// }
 	score, score_ok := result["score"].(float64)
 
-	if title_ok && link_ok && desc_ok && score_ok {
-		story_url, err := url.Parse(link)
-		if err != nil {
-			return story{}, errors.New("Error during Parse")
-		}
-
-		hn_url := "https://news.ycombinator.com/item?id=" + strconv.Itoa(id)
-
-		return story{
-			ID: id, Title: title, Domain: story_url.Hostname(), Link: link, Comments: hn_url, Descendants: int(descendants), Score: int(score),
-		}, nil
-	} else {
+	if !(title_ok && link_ok && desc_ok && score_ok) {
 		return story{}, fmt.Errorf("type cast failed: title=%v link=%v descendants=%v score=%v", title_ok, link_ok, desc_ok, score_ok)
 	}
+
+	story_url, err := url.Parse(link)
+	if err != nil {
+		return story{}, fmt.Errorf("parse url: %w", err)
+	}
+
+	hn_url := "https://news.ycombinator.com/item?id=" + strconv.Itoa(id)
+
+	return story{
+		ID: id, Title: title, Domain: story_url.Hostname(), Link: link, Comments: hn_url, Descendants: int(descendants), Score: int(score),
+	}, nil
 }
 
 func main() {

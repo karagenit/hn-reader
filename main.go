@@ -35,6 +35,13 @@ var global_mutex sync.Mutex
 
 var appVersion string
 
+// httpGetter lets tests substitute a fake HN API without touching the network.
+type httpGetter interface {
+	Get(url string) (*http.Response, error)
+}
+
+var hnClient httpGetter = http.DefaultClient
+
 func init() {
 	// Try to get git commit hash for cache busting
 	cmd := exec.Command("git", "rev-parse", "--short", "HEAD")
@@ -76,7 +83,7 @@ func isStoryReloadNeeded() bool {
 
 // Wipe and set the `ids` global from the HN API
 func updateTopStoryIds() {
-	resp, err := http.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
+	resp, err := hnClient.Get("https://hacker-news.firebaseio.com/v0/topstories.json")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -121,7 +128,7 @@ func getStoryDetails(id int) (story, error) {
 
 	req_url := []string{"https://hacker-news.firebaseio.com/v0/item/", strconv.Itoa(id), ".json"}
   
-	resp, err := http.Get(strings.Join(req_url, ""))
+	resp, err := hnClient.Get(strings.Join(req_url, ""))
 	if err != nil {
 		return story{}, errors.New("Error during Get")
 	}

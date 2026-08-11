@@ -1,4 +1,4 @@
-module hn/api
+module hn-reader
 
 go 1.22.5
 

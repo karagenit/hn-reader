@@ -1,28 +1,28 @@
 package main
 
 import (
-    "net/http"
-	"io"
-    "github.com/gin-gonic/gin"
 	"encoding/json"
-	"strings"
-	"strconv"
-	"time"
-	"net/url"
-	"fmt"
-	"sync"
 	"errors"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"io"
+	"net/http"
+	"net/url"
 	"os/exec"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
 )
 
 type story struct {
-	ID       int    `json:"id"`
-	Title    string `json:"title"`
-	Domain   string `json:"domain"`
-	Link     string `json:"link"`
-	Comments string `json:"comments"`
-	Descendants int `json:"descendants"`
-	Score    int    `json:"score"`
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Domain      string `json:"domain"`
+	Link        string `json:"link"`
+	Comments    string `json:"comments"`
+	Descendants int    `json:"descendants"`
+	Score       int    `json:"score"`
 }
 
 var ids []int
@@ -78,7 +78,7 @@ func updateTopStories() {
 
 // Whether or not we should update the stories - runs every 15 mins
 func isStoryReloadNeeded() bool {
-	return last_update + (15 * 60) < time.Now().Unix()
+	return last_update+(15*60) < time.Now().Unix()
 }
 
 // Wipe and set the `ids` global from the HN API
@@ -113,7 +113,7 @@ func updateTopStoryDetails() {
 		if err == nil {
 			new_stories[i] = new_story
 			// new_stories = append(new_stories, new_story)
-		//} else {
+			//} else {
 			//fmt.Println(err)
 		}
 	}
@@ -127,7 +127,7 @@ func getStoryDetails(id int) (story, error) {
 	var result map[string]interface{}
 
 	req_url := []string{"https://hacker-news.firebaseio.com/v0/item/", strconv.Itoa(id), ".json"}
-  
+
 	resp, err := hnClient.Get(strings.Join(req_url, ""))
 	if err != nil {
 		return story{}, errors.New("Error during Get")
@@ -148,9 +148,9 @@ func getStoryDetails(id int) (story, error) {
 	link, link_ok := result["url"].(string)
 	descendants, desc_ok := result["descendants"].(float64)
 	// figured out these were floats via:
-	// switch v := result["score"].(type) { 
-    // default:
-    //     fmt.Printf("unexpected type %T", v)
+	// switch v := result["score"].(type) {
+	// default:
+	//     fmt.Printf("unexpected type %T", v)
 	// }
 	score, score_ok := result["score"].(float64)
 

@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -65,11 +66,42 @@ func getTopStories(c *gin.Context) {
 	}
 }
 
+// devDataFile is the cached story dump used in dev mode instead of hitting the HN API.
+const devDataFile = "data/dev-stories.json"
+
+// devModeEnabled reports whether DEV_MODE is set, requesting cached stories instead of live API calls.
+func devModeEnabled() bool {
+	return os.Getenv("DEV_MODE") != ""
+}
+
+// loadDevStories populates the `stories` global from devDataFile.
+func loadDevStories() error {
+	data, err := os.ReadFile(devDataFile)
+	if err != nil {
+		return err
+	}
+	var loaded []story
+	if err := json.Unmarshal(data, &loaded); err != nil {
+		return err
+	}
+	stories = loaded
+	return nil
+}
+
 func updateTopStories() {
 	global_mutex.Lock() // TODO would be nice to just return here instead of blocking, so simultaneous user requests don't result in us hitting the API back to back. Could try to use onceFunc or something. Or just a second check to isReloadNeeded inside this function too, inside the mutex lock
 	defer global_mutex.Unlock()
 	fmt.Println(time.Now(), " Starting to update stories")
 	last_update = time.Now().Unix()
+
+	if devModeEnabled() {
+		if err := loadDevStories(); err == nil {
+			fmt.Println(time.Now(), " Loaded stories from dev cache:", devDataFile)
+			return
+		}
+		fmt.Println(time.Now(), " DEV_MODE set but failed to load cache, falling back to live API")
+	}
+
 	updateTopStoryIds()
 	updateTopStoryDetails()
 	fmt.Println(time.Now(), " Finished updating stories")

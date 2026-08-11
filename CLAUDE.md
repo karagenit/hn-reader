@@ -28,6 +28,10 @@ To stop: `lsof -i :8080` then kill the listed pid.
 
 Go tests: `go test ./...`
 
+### Dev mode
+
+`DEV_MODE=1 go run .` skips fetching stories from the HN API and instead loads `data/dev-stories.json` (a fixture array of `story` structs, gitignored — regenerate it if needed, e.g. from the live API). If the file is missing or unparsable, it fails open and falls back to fetching from the live API.
+
 ## Frontend
 
 No build step — `assets/js/*.js` are served as-is. Edit and reload the browser.

@@ -169,7 +169,7 @@ func main() {
 	router := gin.Default()
 
 	// Load HTML templates
-	router.LoadHTMLGlob("*.html")
+	router.LoadHTMLGlob("templates/*.html")
 
 	// Serve static assets
 	router.Static("/assets", "./assets")
@@ -181,7 +181,7 @@ func main() {
 		})
 	})
 
-	router.StaticFile("/settings", "./settings.html")
+	router.StaticFile("/settings", "./templates/settings.html")
 
 	router.GET("/stories", getTopStories)
 	router.Run("localhost:8080")

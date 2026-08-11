@@ -1,0 +1,27 @@
+{
+  "name": "hn-reader",
+  "version": "1.0.0",
+  "description": "Simple Hacker News Reader With Categories",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karagenit/hn-reader.git"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/karagenit/hn-reader/issues"
+  },
+  "homepage": "https://github.com/karagenit/hn-reader#readme",
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "babel-jest": "^30.4.1",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1"
+  }
+}

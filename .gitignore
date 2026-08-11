@@ -1,5 +1,8 @@
 .DS_Store
 *.json
+!package.json
+!package-lock.json
+node_modules/
 data/
 /api
 /hn-reader

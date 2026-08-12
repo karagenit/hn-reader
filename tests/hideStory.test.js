@@ -19,7 +19,7 @@ test('hiding a story removes it from the list, and undo brings it back', async (
     expect(hiddenStore.isStoryHidden(1)).toBe(true);
     expect(titlesShown()).toEqual(['A business story', 'An uncategorized story']);
 
-    const undoElement = document.querySelector('undo-component div');
+    const undoElement = document.querySelector('undo-component .undo-action');
     undoElement.dispatchEvent(new Event('click', { bubbles: true }));
 
     expect(hiddenStore.isStoryHidden(1)).toBe(false);

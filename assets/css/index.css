@@ -116,6 +116,12 @@ x-story-list a:visited {
     color: #ba0000;
 }
 
+.undo-action {
+    float: right;
+    color: #ba0000;
+    cursor: pointer;
+}
+
 .domain span {
     margin-right: 3px;
 }

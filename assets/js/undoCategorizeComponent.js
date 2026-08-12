@@ -8,7 +8,7 @@ export default class UndoCategorizeComponent extends UndoComponentBase {
             <div class="story">
                 <p>
                     Categorized to <category-selector value="${lastAction.newCategory ?? ''}"></category-selector>
-                    (<span class="undo-action">undo</span>)
+                    <span class="undo-action">[undo]</span>
                 </p>
             </div>
         `;

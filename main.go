@@ -192,8 +192,16 @@ func main() {
 	// Serve static assets
 	router.Static("/assets", "./assets")
 
-	// Serve HTML with version for cache busting
+	// Serve HTML with version for cache busting. ETag is the app version, so
+	// clients revalidate on every load instead of reusing a stale cached copy
+	// (observed on iOS Safari/Chrome, which cache HTML aggressively otherwise).
 	router.GET("/", func(c *gin.Context) {
+		c.Header("Cache-Control", "no-cache")
+		c.Header("ETag", appVersion)
+		if c.GetHeader("If-None-Match") == appVersion {
+			c.Status(http.StatusNotModified)
+			return
+		}
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"Version": appVersion,
 		})

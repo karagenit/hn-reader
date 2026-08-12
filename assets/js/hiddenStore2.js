@@ -1,9 +1,20 @@
 let hiddenStories = {};
-try {
-    hiddenStories = JSON.parse(localStorage.getItem('hiddenStories')) || {};
-} catch (e) {}
+
+function loadFromStorage() {
+    try {
+        hiddenStories = JSON.parse(localStorage.getItem('hiddenStories')) || {};
+    } catch (e) {
+        hiddenStories = {};
+    }
+}
+
+loadFromStorage();
 
 export default {
+    // Re-syncs in-memory state from localStorage. Needed in tests, where the module
+    // is only imported once but localStorage is cleared between tests.
+    _reloadFromStorage: loadFromStorage,
+
     hideStory(id) {
         let today = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
 

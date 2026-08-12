@@ -1,4 +1,4 @@
-let categoriesData = {
+const defaultCategories = {
     "Technology": [],
     "Interesting": [],
     "Business": [],
@@ -7,16 +7,22 @@ let categoriesData = {
     "Garbage": []
 }
 
-let storedCategories = localStorage.getItem("categories");
+let categoriesData;
+let lastCategory;
 
-if (storedCategories) {
-    categoriesData = JSON.parse(storedCategories)
+function loadFromStorage() {
+    const storedCategories = localStorage.getItem("categories");
+    categoriesData = storedCategories ? JSON.parse(storedCategories) : JSON.parse(JSON.stringify(defaultCategories));
+    lastCategory = localStorage.getItem('lastCategory') ?? '';
+    // TODO validate that lastCategory is one of the real keys in categories?
 }
 
-let lastCategory = localStorage.getItem('lastCategory') ?? '';
-// TODO validate that lastCategory is one of the real keys in categories?
+loadFromStorage();
 
 export default {
+    // Re-syncs in-memory state from localStorage. Needed in tests, where the module
+    // is only imported once but localStorage is cleared between tests.
+    _reloadFromStorage: loadFromStorage,
     get categories() {
         return Object.keys(categoriesData);
     },

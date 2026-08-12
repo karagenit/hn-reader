@@ -120,7 +120,8 @@ x-story-list a:visited {
     margin-right: 3px;
 }
 
-.domain select {
+.domain select,
+undo-categorize-component select {
     color: inherit;
     background-color: inherit;
     border: 1px solid color(display-p3 0.2824 0.8353 0.5922);

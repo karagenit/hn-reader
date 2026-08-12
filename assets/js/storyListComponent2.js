@@ -2,6 +2,7 @@ import categoryStore from "./categoryStore.js";
 import hiddenStore from "./hiddenStore2.js";
 import StoryComponent from "./storyComponent2.js";
 import UndoComponent from "./undoComponent2.js";
+import UndoCategorizeComponent from "./undoCategorizeComponent.js";
 
 export default class StoryListComponent extends HTMLElement {
     #storyListData;
@@ -13,12 +14,18 @@ export default class StoryListComponent extends HTMLElement {
         this.#apiPromise = fetch('/stories');
     }
 
+    #onStoryListReload = (event) => {
+        this.#lastAction = event?.detail?.triggeringAction; // ?? this.#lastAction;
+        this.render();
+    };
+
     connectedCallback() {
         this.fetchData();
-        window.addEventListener('storyListReload', (event) => {
-            this.#lastAction = event?.detail?.triggeringAction; // ?? this.#lastAction;
-            this.render();
-        }, false);
+        window.addEventListener('storyListReload', this.#onStoryListReload, false);
+    }
+
+    disconnectedCallback() {
+        window.removeEventListener('storyListReload', this.#onStoryListReload, false);
     }
 
     async fetchData() {
@@ -65,7 +72,8 @@ export default class StoryListComponent extends HTMLElement {
         storiesToDisplay.forEach(story => {
             if (story.id == this.#lastAction?.storyId) {
                 // In this case, we don't want to render the actual story, we want to show it's undo button
-                const undoElement = document.createElement('undo-component');
+                const undoTag = this.#lastAction?.name === 'categorize' ? 'undo-categorize-component' : 'undo-component';
+                const undoElement = document.createElement(undoTag);
                 undoElement.lastAction = this.#lastAction;
                 this.append(undoElement);
             } else {

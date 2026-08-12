@@ -1,6 +1,6 @@
 import categoryStore from '../assets/js/categoryStore.js';
 import '../assets/js/index.js';
-import { renderIndexWithStories, flushPromises, stories } from './testHelpers.js';
+import { renderIndexWithStories, flushPromises, stories, titlesShown } from './testHelpers.js';
 
 beforeEach(() => {
     renderIndexWithStories(stories);
@@ -12,11 +12,6 @@ test('switching the top-level category filters the story list', async () => {
     await flushPromises();
 
     const toolbarSelect = document.querySelector('#category select');
-    const storyList = document.querySelector('x-story-list');
-    const titlesShown = () =>
-        Array.from(storyList.querySelectorAll('x-story')).map(
-            (el) => el.storyData.title
-        );
 
     toolbarSelect.value = 'Technology';
     toolbarSelect.dispatchEvent(new Event('change', { bubbles: true }));

@@ -51,3 +51,9 @@ export async function flushPromises() {
     await Promise.resolve();
     await Promise.resolve();
 }
+
+export function titlesShown() {
+    return Array.from(document.querySelectorAll('x-story')).map(
+        (el) => el.storyData.title
+    );
+}

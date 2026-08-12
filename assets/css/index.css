@@ -71,6 +71,10 @@ x-story-list div {
     background-color: color(display-p3 0.0863 0.1373 0.1333);
 }
 
+x-story-list div.story-last-clicked {
+    border-color: color(display-p3 0.2824 0.8353 0.5922);
+}
+
 x-story-list a {
     color: inherit;
     text-decoration: none;

@@ -58,8 +58,9 @@ export default class StoryComponent extends HTMLElement {
         // TODO move styles here
         if (this.storyData) {
             const categorySelectorValue = categoryStore.getCategoryForDomain(this.storyData.domain);
+            const isLastClicked = window.location.hash === `#id-${this.storyData.id}`;
             this.innerHTML = `
-                <div class="story" id="id-${this.storyData.id}">
+                <div class="story${isLastClicked ? ' story-last-clicked' : ''}" id="id-${this.storyData.id}">
                     <story-hide-button></story-hide-button>
                     <p>
                         <a class="story-link" href="${this.storyData.link}">

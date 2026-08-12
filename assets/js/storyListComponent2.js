@@ -47,16 +47,21 @@ export default class StoryListComponent extends HTMLElement {
             return hasId && (wasLastActedOn || (isInCurrentCategory && isNotHidden));
         })
     
+        let storiesToDisplay = filteredStories.slice(0, 10);
+
+        // If the last-clicked story fell off the visible top 10, tack it onto the
+        // end (as the 11th item) so it's still reachable. If it's still within the
+        // top 10, leave it at its natural position.
         if (window.location.hash.startsWith('#id-')) {
             const storyId = parseInt(window.location.hash.slice(4));
-            const storyIndex = filteredStories.findIndex(story => story.id === storyId);
-            if (storyIndex !== -1) {
-                const [story] = filteredStories.splice(storyIndex, 1);
-                filteredStories.unshift(story);
+            const isAlreadyShown = storiesToDisplay.some(story => story.id === storyId);
+            if (!isAlreadyShown) {
+                const lastClickedStory = filteredStories.find(story => story.id === storyId);
+                if (lastClickedStory) {
+                    storiesToDisplay = [...storiesToDisplay, lastClickedStory];
+                }
             }
         }
-
-        const storiesToDisplay = filteredStories.slice(0, 10);
         storiesToDisplay.forEach(story => {
             if (story.id == this.#lastAction?.storyId) {
                 // In this case, we don't want to render the actual story, we want to show it's undo button

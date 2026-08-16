@@ -34,9 +34,11 @@ Go tests: `go test ./...`
 
 ## Frontend
 
-`assets/js/index.js` (and everything it imports) is bundled by Vite into a single
-content-hashed file in `assets/dist/`, referenced by `templates/index.html` via a manifest
-(`assets/dist/.vite/manifest.json`) that the Go server reads at startup. This replaced a
+There are two Vite entry points, each bundled into its own content-hashed file in `assets/dist/`:
+`assets/js/index.js` for the main page and `assets/js/settings.js` for the settings page. Both are
+referenced by their templates (`{{.JsBundle}}` / `{{.SettingsJsBundle}}`) via a manifest
+(`assets/dist/.vite/manifest.json`) that the Go server reads at startup — adding an entry point
+means adding it to both `vite.config.mjs` and `loadJsBundlePaths` in `main.go`. This replaced a
 no-bundler setup after we found some browsers (notably one user's Chrome/iOS combo) would keep
 serving stale cached copies of the individually-imported JS modules even with `?v=` cache-busting
 query params and `Cache-Control: no-cache` headers — a content-hashed bundle filename sidesteps
@@ -56,6 +58,9 @@ production VPS as part of deploy (Node 22 is installed there via NodeSource for 
 `deploying-to-prod` skill.
 
 `assets/css/` has no bundler and is served as-is with a `?v=` cache-busting query param.
+
+Both `/` and `/settings` are rendered Go templates (neither is served as a static file), since each
+needs its bundle path and `{{.Version}}` injected.
 
 Jest tests: `npm test` (jsdom environment, ES modules via Babel). Tests live in `tests/`, prefer exercising real component wiring (real custom elements, real `categoryStore`/`hiddenStore` backed by jsdom `localStorage`) over mocking internals — only `fetch` should be mocked.
 

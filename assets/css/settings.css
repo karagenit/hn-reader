@@ -1,0 +1,13 @@
+#content input {
+    margin-bottom: 1rem;
+    width: 24em;
+    max-width: 100%;
+}
+
+#importexport button {
+    margin-top: 1rem;
+}
+
+#importexport input[type="file"] {
+    margin-top: 1rem;
+}

@@ -7,7 +7,10 @@ export default defineConfig({
     manifest: true,
     emptyOutDir: true,
     rollupOptions: {
-      input: "assets/js/index.js",
+      input: {
+        index: "assets/js/index.js",
+        settings: "assets/js/settings.js",
+      },
     },
   },
 });

@@ -39,24 +39,38 @@ var appVersion string
 // (e.g. /assets/dist/assets/index-NlHrQspP.js), read from the Vite manifest
 var jsBundlePath string
 
+// Same, for the settings page's own entry point.
+var settingsJsBundlePath string
+
 type viteManifestEntry struct {
 	File string `json:"file"`
 }
 
-func loadJsBundlePath() (string, error) {
+// loadJsBundlePaths resolves the hashed output file for each Vite entry point,
+// keyed in the manifest by its source path.
+func loadJsBundlePaths() (index string, settings string, err error) {
 	data, err := os.ReadFile("assets/dist/.vite/manifest.json")
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	var manifest map[string]viteManifestEntry
 	if err := json.Unmarshal(data, &manifest); err != nil {
-		return "", err
+		return "", "", err
 	}
-	entry, ok := manifest["assets/js/index.js"]
-	if !ok {
-		return "", fmt.Errorf("assets/js/index.js not found in vite manifest")
+	lookup := func(src string) (string, error) {
+		entry, ok := manifest[src]
+		if !ok {
+			return "", fmt.Errorf("%s not found in vite manifest", src)
+		}
+		return "/assets/dist/" + entry.File, nil
 	}
-	return "/assets/dist/" + entry.File, nil
+	if index, err = lookup("assets/js/index.js"); err != nil {
+		return "", "", err
+	}
+	if settings, err = lookup("assets/js/settings.js"); err != nil {
+		return "", "", err
+	}
+	return index, settings, nil
 }
 
 // httpGetter lets tests substitute a fake HN API without touching the network.
@@ -207,11 +221,12 @@ func getStoryDetails(id int) (story, error) {
 }
 
 func main() {
-	path, err := loadJsBundlePath()
+	indexPath, settingsPath, err := loadJsBundlePaths()
 	if err != nil {
-		log.Fatalf("failed to load JS bundle path from vite manifest (run `npm run build`): %v", err)
+		log.Fatalf("failed to load JS bundle paths from vite manifest (run `npm run build`): %v", err)
 	}
-	jsBundlePath = path
+	jsBundlePath = indexPath
+	settingsJsBundlePath = settingsPath
 
 	go updateTopStories()
 	router := gin.Default()
@@ -245,7 +260,20 @@ func main() {
 		})
 	})
 
-	router.StaticFile("/settings", "./templates/settings.html")
+	// Rendered (not served statically) so it can reference the hashed settings
+	// bundle and the CSS cache-busting version.
+	router.GET("/settings", func(c *gin.Context) {
+		c.Header("Cache-Control", "no-cache")
+		c.Header("ETag", appVersion)
+		if c.GetHeader("If-None-Match") == appVersion {
+			c.Status(http.StatusNotModified)
+			return
+		}
+		c.HTML(http.StatusOK, "settings.html", gin.H{
+			"Version":          appVersion,
+			"SettingsJsBundle": settingsJsBundlePath,
+		})
+	})
 
 	router.GET("/stories", getTopStories)
 	router.Run("localhost:8080")

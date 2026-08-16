@@ -4,21 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <title>Caleb's HN Reader</title>
-    <style>
-        #content input {
-            margin-bottom: 1rem;
-            width: 24em;
-            max-width: 100%;
-        }
-
-        #importexport button {
-            margin-top: 1rem;
-        }
-
-        #importexport input[type="file"] {
-            margin-top: 1rem;
-        }
-    </style>
+    <link rel="stylesheet" href="/assets/css/settings.css?v={{.Version}}">
+    <script type="module" src="{{.SettingsJsBundle}}"></script>
   </head>
   <body>
     <div>
@@ -31,132 +18,20 @@
     </div>
 
     <div>
-        <button onclick="saveCategories()">Save</button>
+        <button id="save">Save</button>
     </div>
 
     <div id="importexport">
         <hr>
-        <button onclick="downloadJson()">Download Site Data (JSON)</button>
+        <button id="download">Download Site Data (JSON)</button>
         <p id="lastExported">Last exported: loading...</p>
 
         <hr>
         <input type="file" id="import" accept=".json">
         <br>
 
-        <button onclick="importJson()">Import</button>
+        <button id="importButton">Import</button>
     </div>
 
-    <script>
-        let categories = {};
-        storedCategories = localStorage.getItem("categories");
-
-        if (storedCategories) {
-            categories = JSON.parse(storedCategories)
-        }
-
-        downloadJson = function() {
-            const dataStr = JSON.stringify(categories, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            const today = new Date().toISOString().split('T')[0];
-            link.href = url;
-            link.download = `hn-reader-data-${today}.json`;
-            link.click();
-            URL.revokeObjectURL(url);
-
-            localStorage.setItem('lastExported', today);
-            updateLastExportedDisplay();
-        }
-
-        updateLastExportedDisplay = function() {
-            const lastExported = localStorage.getItem('lastExported');
-            const text = lastExported ? `Last exported: ${lastExported}` : 'Last exported: never';
-            document.getElementById('lastExported').textContent = text;
-        }
-
-        importJson = function() {
-            const fileInput = document.getElementById('import');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                alert('Please select a file first');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    // Prevent accidentally blowing up your json with a misclick
-                    if (imported && Object.keys(imported).length > 0) {
-                        categories = imported;
-                        localStorage.setItem('categories', JSON.stringify(categories));
-                        displayCategories();
-                    }
-                } catch (error) {
-                    alert('Error parsing JSON file: ' + error.message);
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        saveCategories = function() {
-            newCategories = {}
-            Array.from(document.getElementsByTagName('input')).forEach(input => {
-                newName = input.value
-                oldName = input.id
-                // if there's no input value, we skip it because this means the user wants to delete it
-                if (newName) {
-                    // if it doesn't already exist, we create it
-                    if (!newCategories[newName]) {
-                        newCategories[newName] = []
-                    }
-                    // if it was an existing category, copy over the old domains
-                    if (oldName) {
-                        newCategories[newName].push(...categories[oldName])
-                    }
-                }
-            })
-
-            categories = newCategories
-            localStorage.setItem('categories', JSON.stringify(categories))
-            console.log(categories)
-            displayCategories()
-        }
-
-        addNewCategoryInput = function (target) {
-            this.removeEventListener('change', addNewCategoryInput)
-
-            let input = document.createElement('input')
-            input.type = 'text'
-            input.placeholder = 'Add a new category here...'
-            input.addEventListener(
-                'change',
-                addNewCategoryInput,
-                false
-            )
-            document.getElementById("content").appendChild(input)
-        }
-
-        displayCategories = function() {
-            document.getElementById("content").innerHTML = ''
-            Object.keys(categories).forEach(category => {
-                let input = document.createElement('input')
-                input.type = 'text'
-                input.placeholder = 'Previously "' + category + '" will be deleted'
-                input.id = category
-                input.value = category
-                document.getElementById("content").appendChild(input)
-
-                let br = document.createElement('br')
-                document.getElementById("content").appendChild(br)
-            })
-            addNewCategoryInput()
-        }
-
-        displayCategories()
-        updateLastExportedDisplay()
-    </script>
   </body>
 </html>

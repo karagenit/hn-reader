@@ -10,6 +10,10 @@ const indexTemplate = fs
     .readFileSync(path.join(__dirname, '../templates/index.html'), 'utf8')
     .replace(/{{.*?}}/g, '');
 
+const settingsTemplate = fs
+    .readFileSync(path.join(__dirname, '../templates/settings.html'), 'utf8')
+    .replace(/{{.*?}}/g, '');
+
 export const stories = [
     {
         id: 1,
@@ -49,6 +53,35 @@ export function renderIndexWithStories(stories) {
     });
     const parsedTemplate = new DOMParser().parseFromString(indexTemplate, 'text/html');
     document.body.innerHTML = parsedTemplate.body.innerHTML;
+}
+
+// settings.js reads localStorage and wires up the DOM at import time, so both
+// have to be in place first, and the module cache reset so each test re-runs it.
+export async function renderSettingsWithCategories(categories) {
+    localStorage.clear();
+    localStorage.setItem('categories', JSON.stringify(categories));
+    const parsedTemplate = new DOMParser().parseFromString(settingsTemplate, 'text/html');
+    document.body.innerHTML = parsedTemplate.body.innerHTML;
+    jest.resetModules();
+    await import('../assets/js/settings.js');
+}
+
+export function storedCategories() {
+    return JSON.parse(localStorage.getItem('categories'));
+}
+
+// The category inputs, keyed by the name they currently hold. The trailing
+// blank input for adding a new category has no id, hence the separate helper.
+export function categoryInput(name) {
+    return document.querySelector(`#content input[id="${name}"]`);
+}
+
+export function newCategoryInput() {
+    return document.querySelector('#content input:not([id])');
+}
+
+export function saveSettings() {
+    document.getElementById('save').dispatchEvent(new Event('click', { bubbles: true }));
 }
 
 export async function flushPromises() {

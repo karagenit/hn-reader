@@ -13,6 +13,7 @@ The app runs on a DigitalOcean droplet (SSH alias `do-vps`, see `~/Documents/vps
 - It's a git checkout with `origin` = `https://github.com/karagenit/hn-reader`. **The server currently tracks the `debug` branch**, not `main` — check `sudo -u hn-reader git -C /var/www/hn-reader status` to confirm which branch is actually checked out before pulling, since this may change over time.
 - Go toolchain is installed at `/usr/local/go/bin/go` (not on `$PATH` for the `hn-reader` user). The server is `x86_64` — if deploying from an ARM Mac, don't cross-compile locally and copy the binary over; build directly on the server instead, which is what's always been done here.
 - The compiled binary (`hn-reader`) sits alongside the source in the same directory and is what systemd execs directly — there's no separate build/release dir.
+- Node 22 is installed system-wide (via NodeSource, `apt install nodejs`, on `$PATH` for all users) so the frontend can be built on the server too — `assets/dist/` (the Vite-bundled JS) is gitignored, not committed, so **`npm ci && npm run build` must run before `go build`** on every deploy or the server will serve a stale/missing bundle. The droplet is memory-constrained (~1GB RAM, no swap) but `npm ci`/`vite build` for this project takes ~12s and is lightweight, so this hasn't been an issue.
 - Service: `hn-reader.service` (`systemctl cat hn-reader.service` to view). Runs as user `hn-reader`, `Restart=on-failure`. Listens on `localhost:8080`.
 - Apache vhost `/etc/apache2/sites-available/hn.caleb.software.conf` reverse-proxies `hn.caleb.software` (port 80) to `localhost:8080`. This rarely needs touching for a normal deploy — only if ports/domain change.
 - `/etc/apache2` itself is a separate git repo pushed to `vps-etc`; unrelated to app deploys unless you're changing the vhost.
@@ -24,6 +25,8 @@ ssh do-vps "sudo -u hn-reader bash -c '
   cd /var/www/hn-reader &&
   git status &&
   git pull &&
+  npm ci &&
+  npm run build &&
   /usr/local/go/bin/go build -o hn-reader . &&
   echo BUILD_OK
 '"

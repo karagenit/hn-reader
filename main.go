@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -34,6 +35,29 @@ var last_update int64 // TODO need to be atomic?
 var global_mutex sync.Mutex
 
 var appVersion string
+
+// (e.g. /assets/dist/assets/index-NlHrQspP.js), read from the Vite manifest
+var jsBundlePath string
+
+type viteManifestEntry struct {
+	File string `json:"file"`
+}
+
+func loadJsBundlePath() (string, error) {
+	data, err := os.ReadFile("assets/dist/.vite/manifest.json")
+	if err != nil {
+		return "", err
+	}
+	var manifest map[string]viteManifestEntry
+	if err := json.Unmarshal(data, &manifest); err != nil {
+		return "", err
+	}
+	entry, ok := manifest["assets/js/index.js"]
+	if !ok {
+		return "", fmt.Errorf("assets/js/index.js not found in vite manifest")
+	}
+	return "/assets/dist/" + entry.File, nil
+}
 
 // httpGetter lets tests substitute a fake HN API without touching the network.
 type httpGetter interface {
@@ -183,6 +207,12 @@ func getStoryDetails(id int) (story, error) {
 }
 
 func main() {
+	path, err := loadJsBundlePath()
+	if err != nil {
+		log.Fatalf("failed to load JS bundle path from vite manifest (run `npm run build`): %v", err)
+	}
+	jsBundlePath = path
+
 	go updateTopStories()
 	router := gin.Default()
 
@@ -210,7 +240,8 @@ func main() {
 			return
 		}
 		c.HTML(http.StatusOK, "index.html", gin.H{
-			"Version": appVersion,
+			"Version":  appVersion,
+			"JsBundle": jsBundlePath,
 		})
 	})
 

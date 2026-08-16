@@ -4,5 +4,6 @@
 !package-lock.json
 node_modules/
 data/
+assets/dist/
 /api
 /hn-reader

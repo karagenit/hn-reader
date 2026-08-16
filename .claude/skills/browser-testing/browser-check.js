@@ -1,9 +1,9 @@
 // Minimal helper for ad-hoc real-browser checks against the running dev server.
 // Not a test framework — just launches Chromium, hands you a page, and cleans up.
 // Copy the `main()` body below into a scratch script and adapt it per check; see SKILL.md.
-const { chromium } = require('playwright');
+import { chromium } from 'playwright';
 
-async function withPage(fn) {
+export async function withPage(fn) {
     const browser = await chromium.launch();
     const page = await browser.newPage();
     try {
@@ -24,8 +24,4 @@ async function main() {
     });
 }
 
-if (require.main === module) {
-    main();
-}
-
-module.exports = { withPage };
+main();

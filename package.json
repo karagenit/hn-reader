@@ -2,7 +2,7 @@
   "name": "hn-reader",
   "version": "1.0.0",
   "description": "Simple Hacker News Reader With Categories",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "jest",
     "build": "vite build"
@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/karagenit/hn-reader/issues"
   },

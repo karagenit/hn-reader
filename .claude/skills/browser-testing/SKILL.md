@@ -29,6 +29,8 @@ Playwright versions. Don't bump the `playwright` version without checking this s
    `page.screenshot({ path, fullPage: true })`.
 3. Run it with `node <script>.js` from the repo root (module resolution needs to find
    `node_modules/playwright` — running from elsewhere will fail with `Cannot find module`).
+   The package is `"type": "module"`, so scratch scripts must use `import`, not `require` —
+   a `.js` script using `require` will fail with `require is not defined in ES module scope`.
 4. View the screenshot(s) to confirm the UI actually looks right, not just that assertions
    passed.
 5. Clean up: delete the throwaway script, and kill the dev server

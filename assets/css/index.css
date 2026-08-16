@@ -135,6 +135,14 @@ undo-categorize-component select {
     font-size: 12px;
 }
 
+/* Uncategorized is the empty option, so it's the one that needs attention —
+   gold to sit between the green (categorized) and red (hide/undo) accents. */
+.domain select:has(option[value=""]:checked),
+undo-categorize-component select:has(option[value=""]:checked) {
+    color: color(display-p3 0.9294 0.7686 0.2784);
+    border-color: color(display-p3 0.9294 0.7686 0.2784);
+}
+
 hr {
     margin: 0 0.8rem;
     height: 1px;

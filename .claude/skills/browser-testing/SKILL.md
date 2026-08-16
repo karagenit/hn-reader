@@ -21,8 +21,9 @@ Playwright versions. Don't bump the `playwright` version without checking this s
    ```bash
    DEV_MODE=1 go run . > /tmp/hn-e2e.log 2>&1 &
    ```
-2. Copy `browser-check.js`'s pattern into a throwaway script (e.g. in the scratchpad dir, or
-   `scratch_*.js` at the repo root — either way, don't commit it) and adapt the body inside
+2. Copy `browser-check.js`'s pattern into a throwaway `scratch_*.js` at the repo root (don't
+   commit it — the script must live in the repo root, not the scratchpad dir, so Node can
+   resolve `node_modules/playwright`) and adapt the body inside
    `withPage()` for whatever you're checking: navigate, interact with real DOM elements
    (`page.locator(...)`, `.click()`, `.selectOption()`, dispatch events), assert via
    `page.evaluate(() => localStorage.getItem(...))`, and screenshot with
@@ -32,9 +33,31 @@ Playwright versions. Don't bump the `playwright` version without checking this s
    The package is `"type": "module"`, so scratch scripts must use `import`, not `require` —
    a `.js` script using `require` will fail with `require is not defined in ES module scope`.
 4. View the screenshot(s) to confirm the UI actually looks right, not just that assertions
-   passed.
-5. Clean up: delete the throwaway script, and kill the dev server
-   (`lsof -ti :8080 | xargs kill`).
+   passed. This means the *whole page*, not just the element under test — see "Screenshots are
+   for layout, not just assertions" below.
+5. Clean up: delete the throwaway script, but **leave the dev server running** so the user can
+   pick up manual testing where the automated check left off.
+
+## Screenshots are for layout, not just assertions
+
+A screenshot's job is to catch what your assertions didn't think to check. Read it as "does this
+whole page look right", not "is the thing I'm testing present".
+
+Two habits that make that work:
+
+- **Capture a baseline first.** Screenshot the page *before* your change (stash it, or check out
+  `main`) so you have something to compare against. Without a baseline you're judging an
+  unfamiliar UI against no expectation, and "there's a dropdown, looks fine" passes for
+  verification.
+- **Renaming a custom element orphans its CSS.** Rules keyed to a tag name
+  (`.toolbar toolbar-category-selector { flex-grow: 1 }`) silently stop matching when the element
+  is renamed — nothing errors, the styling just vanishes. Grep `assets/css/` for the old tag as
+  part of any rename. This has bitten us once already: the toolbar selector lost its `flex-grow`
+  and shrank to content width, and it was visible in a screenshot that got looked at but not
+  really *read*.
+
+Also scope claims accordingly: a check that verified behavior verified behavior. Don't report it
+as having confirmed the UI unless the screenshots were actually compared.
 
 ## Notes
 

@@ -3,7 +3,12 @@ import {
     storedCategories,
     categoryInput,
     newCategoryInput,
-    saveSettings
+    saveSettings,
+    storedViews,
+    viewInput,
+    newViewInput,
+    viewCategoryCheckbox,
+    saveViews
 } from './testHelpers.js';
 
 test('typing a name into the trailing blank input creates a new empty category', async () => {
@@ -50,4 +55,76 @@ test('renaming a category to an existing name merges their domains', async () =>
     });
     expect(categoryInput('Business')).toBeNull();
     expect(document.querySelectorAll('#content input[id]')).toHaveLength(1);
+});
+
+test('with no stored views, categories are migrated 1:1 and persisted', async () => {
+    await renderSettingsWithCategories({
+        Technology: ['tech.example.com'],
+        Business: ['biz.example.com']
+    });
+
+    expect(storedViews()).toEqual({
+        Technology: ['Technology'],
+        Business: ['Business']
+    });
+    expect(viewCategoryCheckbox('Technology', 'Technology').checked).toBe(true);
+    expect(viewCategoryCheckbox('Technology', 'Business').checked).toBe(false);
+});
+
+test('a view can span multiple categories', async () => {
+    await renderSettingsWithCategories({
+        Technology: ['tech.example.com'],
+        Business: ['biz.example.com']
+    });
+
+    viewCategoryCheckbox('Technology', 'Business').checked = true;
+    saveViews();
+
+    expect(storedViews()).toEqual({
+        Technology: ['Technology', 'Business'],
+        Business: ['Business']
+    });
+});
+
+test('typing into the trailing blank row creates a new view', async () => {
+    await renderSettingsWithCategories(
+        { Technology: ['tech.example.com'], Business: ['biz.example.com'] },
+        { Technology: ['Technology'] }
+    );
+
+    const blank = newViewInput();
+    blank.value = 'Work';
+    viewCategoryCheckbox('', 'Business').checked = true;
+    saveViews();
+
+    expect(storedViews()).toEqual({
+        Technology: ['Technology'],
+        Work: ['Business']
+    });
+});
+
+test('blanking out a view name deletes it', async () => {
+    await renderSettingsWithCategories(
+        { Technology: ['tech.example.com'] },
+        { Technology: ['Technology'], Junk: [] }
+    );
+
+    viewInput('Junk').value = '';
+    saveViews();
+
+    expect(storedViews()).toEqual({ Technology: ['Technology'] });
+    expect(viewInput('Junk')).toBeNull();
+});
+
+test('renaming a category keeps the views pointing at it, deleting one drops it', async () => {
+    await renderSettingsWithCategories(
+        { Technology: ['tech.example.com'], Business: ['biz.example.com'] },
+        { Work: ['Technology', 'Business'] }
+    );
+
+    categoryInput('Technology').value = 'Tech';
+    categoryInput('Business').value = '';
+    saveSettings();
+
+    expect(storedViews()).toEqual({ Work: ['Tech'] });
 });

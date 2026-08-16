@@ -1,3 +1,12 @@
+import viewStore from "./viewStore.js";
+import ViewSettingsComponent from "./viewSettingsComponent.js";
+
+const viewSettings = document.getElementById('views');
+viewSettings.addEventListener('viewsSave', (event) => {
+    viewStore.setViews(event.detail.views);
+    displayViews();
+});
+
 let categories = {};
 
 const storedCategories = localStorage.getItem("categories");
@@ -6,7 +15,7 @@ if (storedCategories) {
 }
 
 export function downloadJson() {
-    const dataStr = JSON.stringify(categories, null, 2);
+    const dataStr = JSON.stringify({ categories, views: viewStore.allViews }, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
@@ -39,11 +48,17 @@ export function importJson() {
     reader.onload = function(e) {
         try {
             const imported = JSON.parse(e.target.result);
+            // Backups made before views existed are a bare category map
+            const importedCategories = imported?.categories ?? imported;
             // Prevent accidentally blowing up your json with a misclick
-            if (imported && Object.keys(imported).length > 0) {
-                categories = imported;
+            if (importedCategories && Object.keys(importedCategories).length > 0) {
+                categories = importedCategories;
                 localStorage.setItem('categories', JSON.stringify(categories));
+                viewStore.setViews(imported?.views ?? Object.fromEntries(
+                    Object.keys(categories).map(category => [category, [category]])
+                ));
                 displayCategories();
+                displayViews();
             }
         } catch (error) {
             alert('Error parsing JSON file: ' + error.message);
@@ -54,6 +69,8 @@ export function importJson() {
 
 export function saveCategories() {
     const newCategories = {};
+    // Old name -> new name, so views keep pointing at renamed categories
+    const renames = {};
     // Scoped to #content so the file picker in #importexport isn't treated as a category input
     Array.from(document.querySelectorAll('#content input')).forEach(input => {
         const newName = input.value;
@@ -67,13 +84,18 @@ export function saveCategories() {
             // if it was an existing category, copy over the old domains
             if (oldName) {
                 newCategories[newName].push(...categories[oldName]);
+                renames[oldName] = newName;
             }
         }
     });
 
     categories = newCategories;
     localStorage.setItem('categories', JSON.stringify(categories));
+
+    viewStore.applyCategoryRenames(renames);
+
     displayCategories();
+    displayViews();
 }
 
 function addNewCategoryInput() {
@@ -98,6 +120,13 @@ export function displayCategories() {
         content.appendChild(document.createElement('br'));
     });
     addNewCategoryInput();
+    // Unsaved renames aren't in any store yet, so hand the names to the views
+    // editor directly rather than letting it read them back out of storage.
+    viewSettings.categories = Object.keys(categories);
+}
+
+export function displayViews() {
+    viewSettings.views = viewStore.allViews;
 }
 
 document.getElementById('save').addEventListener('click', saveCategories);
@@ -105,4 +134,5 @@ document.getElementById('download').addEventListener('click', downloadJson);
 document.getElementById('importButton').addEventListener('click', importJson);
 
 displayCategories();
+displayViews();
 updateLastExportedDisplay();

@@ -1,4 +1,5 @@
 import categoryStore from "./categoryStore.js";
+import viewStore from "./viewStore.js";
 import hiddenStore from "./hiddenStore.js";
 import StoryComponent from "./storyComponent.js";
 import UndoComponent from "./undoComponent.js";
@@ -43,13 +44,16 @@ export default class StoryListComponent extends HTMLElement {
 
         this.innerHTML = ''
 
-        let currentCategory = document.getElementById("category").value
+        let currentView = document.getElementById("view").value
 
-        // Only show stories in this category and not hidden, unless that one was just acted on so we can show it's undo
+        // Only show stories in this view and not hidden, unless that one was just acted on so we can show it's undo
         let filteredStories = this.#storyListData.filter(story => {
             const hasId = !!story.id;
             const wasLastActedOn = this.#lastAction?.storyId == story.id;
-            const isInCurrentCategory = currentCategory === categoryStore.getCategoryForDomain(story['domain']);
+            const isInCurrentCategory = viewStore.viewIncludesCategory(
+                currentView,
+                categoryStore.getCategoryForDomain(story['domain'])
+            );
             const isNotHidden = !hiddenStore.isStoryHidden(story['id'])
             return hasId && (wasLastActedOn || (isInCurrentCategory && isNotHidden));
         })

@@ -30,7 +30,7 @@ body {
     display: flex;
 }
 
-.toolbar toolbar-category-selector {
+.toolbar toolbar-view-selector {
     flex-grow: 1;
     border: none;
     margin-right: 0.5rem; /* to make the right dropdown arrow move in */

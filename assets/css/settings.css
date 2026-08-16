@@ -4,6 +4,25 @@
     max-width: 100%;
 }
 
+#views {
+    display: block;
+}
+
+#views .view {
+    margin-bottom: 1rem;
+}
+
+#views .view input[type="text"] {
+    width: 24em;
+    max-width: 100%;
+}
+
+#views .view label {
+    display: inline-block;
+    margin-right: 0.75em;
+    white-space: nowrap;
+}
+
 #importexport button {
     margin-top: 1rem;
 }

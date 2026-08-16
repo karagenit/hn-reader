@@ -2,6 +2,8 @@
 
 Simple Hacker News reader with per-domain categorization and story hiding, stored in `localStorage`.
 
+A **category** is a bucket of domains (`localStorage` key `categories`). A **view** is what the main page filter actually offers: a named set of one or more categories (`localStorage` key `views`), matched with OR. Views are edited on the settings page. Users who predate views get one view per category, 1:1, on first load.
+
 ## Structure
 
 - `main.go`, `main_test.go` — Go backend. Fetches/serves HN story data, serves the templates and static assets.

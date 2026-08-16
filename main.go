@@ -189,8 +189,15 @@ func main() {
 	// Load HTML templates
 	router.LoadHTMLGlob("templates/*.html")
 
-	// Serve static assets
-	router.Static("/assets", "./assets")
+	// Serve static assets. Cache-Control: no-cache forces revalidation on every
+	// load instead of reusing a stale cached copy (observed on iOS Safari/Chrome,
+	// which can cache assets aggressively even with a version query string).
+	assets := router.Group("/assets")
+	assets.Use(func(c *gin.Context) {
+		c.Header("Cache-Control", "no-cache")
+		c.Next()
+	})
+	assets.StaticFS("/", http.Dir("./assets"))
 
 	// Serve HTML with version for cache busting. ETag is the app version, so
 	// clients revalidate on every load instead of reusing a stale cached copy

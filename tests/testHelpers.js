@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import categoryStore from '../assets/js/categoryStore.js';
-import hiddenStore from '../assets/js/hiddenStore2.js';
+import hiddenStore from '../assets/js/hiddenStore.js';
 
 // Real template, so tests catch drift (e.g. a renamed #category element)
 // that would break the frontend wiring. Go template syntax is stripped since

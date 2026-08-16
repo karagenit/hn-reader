@@ -1,4 +1,4 @@
-import hiddenStore from "./hiddenStore2.js";
+import hiddenStore from "./hiddenStore.js";
 import UndoComponentBase from "./undoComponentBase.js";
 
 export default class UndoComponent extends UndoComponentBase {

@@ -1,7 +1,7 @@
 import StoryCategorySelector from "./storyCategorySelectorComponent.js";
 import StoryHideButton from "./storyHideButtonComponent.js";
 import categoryStore from "./categoryStore.js";
-import hiddenStore from "./hiddenStore2.js";
+import hiddenStore from "./hiddenStore.js";
 
 export default class StoryComponent extends HTMLElement {
     #storyData;

@@ -1,4 +1,4 @@
-import hiddenStore from '../assets/js/hiddenStore2.js';
+import hiddenStore from '../assets/js/hiddenStore.js';
 import '../assets/js/index.js';
 import { renderIndexWithStories, flushPromises, stories, titlesShown } from './testHelpers.js';
 

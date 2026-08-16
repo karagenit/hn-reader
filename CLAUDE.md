@@ -43,9 +43,13 @@ query params and `Cache-Control: no-cache` headers — a content-hashed bundle f
 the problem entirely since the URL itself changes when the code changes.
 
 **After editing anything in `assets/js/`, run `npm run build`** to regenerate the bundle, then
-reload the browser. The server falls back to serving `assets/js/index.js` directly (unbundled) if
-no manifest is found, so `go test`/first checkouts don't break — but that fallback path is not
-what's used in production.
+reload the browser. If the manifest is missing, the server fails to start with a clear error
+telling you to run the build — it does not silently fall back to unbundled JS.
+
+Confirmed fix (2026-08-16): this resolved a real stale-JS bug on a user's Chrome/iOS device that
+`?v=` query params and `Cache-Control: no-cache` headers alone couldn't fix. If asset-caching
+issues come up again, don't re-litigate HTTPS/header theories — both were already ruled out; the
+content-hash bundle filename was the actual fix.
 
 `assets/dist/` (including the manifest) is gitignored, not committed — it's built on the
 production VPS as part of deploy (Node 22 is installed there via NodeSource for this). See the

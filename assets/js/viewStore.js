@@ -60,13 +60,19 @@ export default {
     applyCategoryRenames(renames) {
         Object.keys(viewsData).forEach(view => {
             viewsData[view] = [...new Set(
-                viewsData[view].map(category => renames[category]).filter(Boolean)
+                viewsData[view]
+                    // '' is the uncategorized bucket, not a real category, so it's
+                    // never renamed or deleted
+                    .map(category => category === '' ? '' : renames[category])
+                    .filter(category => category !== undefined)
             )];
         });
         localStorage.setItem("views", JSON.stringify(viewsData));
     },
-    // True if a story in `category` belongs in `view`. The empty view is the
-    // built-in "Uncategorized" one, matching stories with no category.
+    // True if a story in `category` belongs in `view`. Note the two different
+    // empty strings: the empty *view* is the built-in "Uncategorized" filter,
+    // while an empty *category* in a view's list means that view includes
+    // uncategorized stories alongside its real categories.
     viewIncludesCategory(view, category) {
         if (view === '') {
             return category === '';

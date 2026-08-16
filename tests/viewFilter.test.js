@@ -45,3 +45,15 @@ test('a view spanning several categories shows stories from any of them', async 
     toolbarSelect.dispatchEvent(new Event('change', { bubbles: true }));
     expect(titlesShown()).toEqual(['A tech story', 'A business story']);
 });
+
+test('a view can include uncategorized stories alongside its categories', async () => {
+    renderIndexWithStories(stories, { 'Mixed': ['Technology', ''] });
+    categoryStore.moveDomainToCategory('tech.example.com', 'Technology');
+    categoryStore.moveDomainToCategory('biz.example.com', 'Business');
+    await flushPromises();
+
+    const toolbarSelect = document.querySelector('#view select');
+    toolbarSelect.value = 'Mixed';
+    toolbarSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    expect(titlesShown()).toEqual(['A tech story', 'An uncategorized story']);
+});

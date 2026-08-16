@@ -60,14 +60,16 @@ export default class ViewSettingsComponent extends HTMLElement {
         }
         row.appendChild(input);
 
-        this.#categories.forEach(category => {
+        // '' is the uncategorized bucket — stories whose domain isn't in any
+        // category. It's offered like any other, so a view can include it.
+        ['', ...this.#categories].forEach(category => {
             const label = document.createElement('label');
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.value = category;
             checkbox.checked = (this.#views[view] ?? []).includes(category);
             label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(category));
+            label.appendChild(document.createTextNode(category || 'Uncategorized'));
             row.appendChild(label);
         });
 

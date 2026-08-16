@@ -128,3 +128,20 @@ test('renaming a category keeps the views pointing at it, deleting one drops it'
 
     expect(storedViews()).toEqual({ Work: ['Tech'] });
 });
+
+test('a view can have Uncategorized checked, and it survives category renames', async () => {
+    await renderSettingsWithCategories(
+        { Technology: ['tech.example.com'], Business: ['biz.example.com'] },
+        { Mixed: ['Technology'] }
+    );
+
+    viewCategoryCheckbox('Mixed', '').checked = true;
+    saveViews();
+    expect(storedViews()).toEqual({ Mixed: ['', 'Technology'] });
+
+    // Uncategorized isn't a real category, so renaming/deleting shouldn't touch it
+    categoryInput('Technology').value = 'Tech';
+    categoryInput('Business').value = '';
+    saveSettings();
+    expect(storedViews()).toEqual({ Mixed: ['', 'Tech'] });
+});

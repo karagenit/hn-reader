@@ -21,6 +21,10 @@ Playwright versions. Don't bump the `playwright` version without checking this s
    ```bash
    DEV_MODE=1 go run . > /tmp/hn-e2e.log 2>&1 &
    ```
+   **Restart the server after every `npm run build`.** The Go server reads the Vite manifest once
+   at startup, so after a rebuild it keeps serving the previous content-hashed bundle path, which
+   now 404s — the page loads with no JS at all and your script times out waiting for an element
+   that never renders.
 2. Copy `browser-check.js`'s pattern into a throwaway `scratch_*.js` at the repo root (don't
    commit it — the script must live in the repo root, not the scratchpad dir, so Node can
    resolve `node_modules/playwright`) and adapt the body inside
